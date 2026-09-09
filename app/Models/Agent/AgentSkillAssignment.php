@@ -1,0 +1,26 @@
+<?php
+
+namespace App\Models\Agent;
+
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+
+class AgentSkillAssignment extends Model
+{
+    use HasFactory;
+
+    protected $fillable = [
+        'agent_profile_id', 'skill_slug', 'is_enabled', 'config_overrides',
+    ];
+
+    protected $casts = [
+        'is_enabled' => 'boolean',
+        'config_overrides' => 'array',
+    ];
+
+    public function agenofile(): BelongsTo
+    {
+        return $this->belongsTo(Agenofile::class);
+    }
+}

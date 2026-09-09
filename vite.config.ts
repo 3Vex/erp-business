@@ -1,0 +1,60 @@
+import { defineConfig } from 'vite';
+import vue from '@vitejs/plugin-vue';
+import laravel from 'laravel-vite-plugin';
+import { bunny } from 'laravel-vite-plugin/fonts';
+import tailwindcss from '@tailwindcss/vite';
+import { visualizer } from 'rollup-plugin-visualizer';
+import path from 'path';
+
+const analyze = process.env.ANALYZE === 'true';
+
+export default defineConfig({
+    plugins: [
+        laravel({
+            input: ['resources/css/app.css', 'resources/js/main.ts'],
+            refresh: true,
+            fonts: [
+                bunny('Instrument Sans', {
+                    weights: [400, 500, 600],
+                }),
+            ],
+        }),
+        vue({
+            template: {
+                transformAssetUrls: {
+                    base: null,
+                    includeAbsolute: false,
+                },
+            },
+        }),
+        tailwindcss(),
+    ],
+    resolve: {
+        alias: {
+            '@': path.resolve(__dirname, 'resources/js'),
+        },
+    },
+    server: {
+        watch: {
+            ignored: ['**/storage/framework/views/**'],
+        },
+    },
+    build: {
+        target: 'es2020',
+        cssCodeSplit: true,
+        sourcemap: false,
+        chunkSizeWarningLimit: 1000,
+        rollupOptions: {
+            output: {
+                manualChunks(id: string) {
+                    if (id.includes('node_modules')) {
+                        if (id.includes('/vue/') || id.includes('/@vue/') || id.includes('/vue-router/') || id.includes('/pinia/')) {
+                            return 'vendor-vue';
+                        }
+                    }
+                },
+            },
+            ...(analyze ? { plugins: [visualizer({ open: true, filename: 'bundle-stats.html' })] } : {}),
+        },
+    },
+});
