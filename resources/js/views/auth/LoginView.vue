@@ -56,7 +56,7 @@
                 </button>
 
                 <div class="text-center text-sm text-gray-500 dark:text-gray-500">
-                    Access is by invitation only. Contact your administrator.
+                    Account registration is managed by your administrator.
                 </div>
             </form>
         </div>

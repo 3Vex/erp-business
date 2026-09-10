@@ -1,10 +1,10 @@
-# CLAUDE.md
+# AGENTS.md
 
-This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+This file provides guidance to AI coding assistants (Claude, Gemini, Copilot, etc.) when working with code in this repository.
 
 ## Project Overview
 
-TPT Free ERP is an open-source enterprise resource planning system built on **Laravel 13.8** (PHP 8.3+). It covers Finance, Inventory, HR, Sales, Procurement, Manufacturing, Projects, Quality, Asset Management, Field Service, and LMS modules.
+Enterprise Resource Planning (ERP) System is an open-source system built on **Laravel 13.8** (PHP 8.3+). It covers Finance, Inventory, HR, Sales, Procurement, Manufacturing, Projects, Quality, Asset Management, Field Service, LMS, POS, Fleet, Subscription, Marketing, Network, Expenses, Budget & Forecasting, Documents, Contracts, Recruitment, Training, Analytics, Donor/Grant Management, and E-Signature modules.
 
 The project runs fully on Laravel. Legacy framework code (`core/`, `api/`, `modules/`) has been deleted. All code lives in the Laravel layer.
 
@@ -17,7 +17,7 @@ composer run setup
 # Start full dev environment (PHP server + queue + log viewer + Vite, concurrently)
 composer run dev
 
-# Run all tests (191 passing, in-memory SQLite — no DB setup needed)
+# Run all tests (560 passing, in-memory SQLite — no DB setup needed)
 composer run test
 
 # Run a single test or filter by name
@@ -36,6 +36,19 @@ php artisan l5-swagger:generate
 
 # Inspect registered routes
 php artisan route:list --path=api
+
+# AI Skills management
+php artisan skills:sync
+
+# Scheduled reports
+php artisan reports:run-scheduled
+php artisan reports:clean-expired
+
+# Agent schedules
+php artisan agents:run-schedules
+
+# Bundle size analysis
+npm run build:analyze
 ```
 
 ## Architecture
@@ -72,12 +85,12 @@ Business logic lives in `app/Services/{Module}/`. Controllers delegate complex o
 Vite + Vue 3 + Pinia + Tailwind CSS 4. Entry points: `resources/css/app.css` and `resources/js/app.js`. All routes in `resources/js/router/index.ts` are lazy-loaded.
 
 ### OpenAPI / Swagger
-All 59 API endpoints are documented in [app/Http/Controllers/Api/OpenApiSpec.php](app/Http/Controllers/Api/OpenApiSpec.php) using PHP 8 attributes. Interactive UI at `/api/documentation`. Regenerate with `php artisan l5-swagger:generate`.
+All API endpoints are documented in [app/Http/Controllers/Api/OpenApiSpec.php](app/Http/Controllers/Api/OpenApiSpec.php) using PHP 8 attributes. Interactive UI at `/api/documentation`. Regenerate with `php artisan l5-swagger:generate`.
 
 ### Testing
-Tests use SQLite in-memory (`DB_CONNECTION=sqlite`, `DB_DATABASE=:memory:`) — no real database needed to run the test suite. 191 tests pass across 12 modules. Feature tests in `tests/Feature/{Module}/`, factories in `database/factories/{Module}/`.
+Tests use SQLite in-memory (`DB_CONNECTION=sqlite`, `DB_DATABASE=:memory:`) — no real database needed to run the test suite. 560 tests pass across all modules. Feature tests in `tests/Feature/{Module}/`, factories in `database/factories/{Module}/`.
 
-All 24 model factories are in place. All key models have `HasFactory`. Test auth pattern:
+All model factories are in place. All key models have `HasFactory`. Test auth pattern:
 ```php
 $user = User::factory()->create();
 $token = $user->createToken('test')->plainTextToken;
@@ -85,26 +98,45 @@ $this->getJson('/api/...', ['Authorization' => "Bearer {$token}"]);
 ```
 
 ### Redis Caching
-`CACHE_STORE=redis` enables tag-based invalidation (recommended for production). Falls back gracefully to `database` cache without tag support. Caching is active on these controllers (via `$cacheTag`): AccountController, ProductController, WarehouseController, EmployeeController, DepartmentController, CustomerController, VendorController, ProjectController, CourseController.
+`CACHE_STORE=redis` enables tag-based invalidation (recommended for production). Falls back gracefully to `database` cache without tag support. Caching is active on controllers via `$cacheTag`: AccountController, ProductController, WarehouseController, EmployeeController, DepartmentController, CustomerController, VendorController, ProjectController, CourseController.
+
+### AI Agent Infrastructure
+- Agent profiles, tokens, skill assignments, executions, and schedules in `app/Models/Agent/`
+- Skill registry scans `storage/app/skills/*.md` files with YAML frontmatter
+- Supports Ollama (local) and OpenRouter (cloud) AI providers via `config/ai.php`
+- Agent execution is fully optional — no agent code affects core ERP operation
 
 ## Module Overview
 
 | Module | Controllers | Tests | Routes prefix |
 |--------|-------------|-------|---------------|
-| Finance | AccountController, TransactionController, JournalEntryController, ReportController | ✅ | `/api/finance/` |
-| Inventory | ProductController, CategoryController, WarehouseController, StockMovementController | ✅ | `/api/inventory/` |
-| HR | EmployeeController, DepartmentController, LeaveRequestController, AttendanceController, PayrollController | ✅ | `/api/hr/` |
-| Sales | CustomerController, OrderController, InvoiceController, CrmController | ✅ | `/api/sales/` |
-| Procurement | VendorController, PurchaseOrderController | ✅ | `/api/procurement/` |
-| Manufacturing | BomController, WorkOrderController | ✅ | `/api/manufacturing/` |
-| Projects | ProjectController, TaskController, TimeEntryController | ✅ | `/api/projects/` |
-| Quality | CheckController, NonConformanceController | ✅ | `/api/quality/` |
-| Assets | AssetController, MaintenanceController | ✅ | `/api/assets/` |
-| FieldService | TicketController | ✅ | `/api/field-service/` |
-| LMS | CourseController, EnrollmentController | ✅ | `/api/lms/` |
-| POS | TerminalController, TransactionController | ✅ | `/api/pos/` |
-| Fleet | VehicleController, DriverController, TripController, FuelLogController, MaintenanceController | ✅ | `/api/fleet/` |
-| Subscription | PlanController, SubscriptionController, UsageController | ✅ | `/api/subscription/` |
+| Finance | AccountController, TransactionController, JournalEntryController, ReportController, BudgetController, BudgetLineController | ✅ | `/api/v1/finance/` |
+| Inventory | ProductController, CategoryController, WarehouseController, StockMovementController | ✅ | `/api/v1/inventory/` |
+| HR | EmployeeController, DepartmentController, LeaveRequestController, AttendanceController, PayrollController, DirectoryController, SelfServiceController, EmployeeDocumentController, HRTrackingController | ✅ | `/api/v1/hr/` |
+| Sales | CustomerController, OrderController, InvoiceController, CrmController | ✅ | `/api/v1/sales/` |
+| Procurement | VendorController, PurchaseOrderController | ✅ | `/api/v1/procurement/` |
+| Manufacturing | BomController, WorkOrderController | ✅ | `/api/v1/manufacturing/` |
+| Projects | ProjectController, TaskController, TimeEntryController | ✅ | `/api/v1/projects/` |
+| Quality | CheckController, NonConformanceController | ✅ | `/api/v1/quality/` |
+| Assets | AssetController, MaintenanceController | ✅ | `/api/v1/assets/` |
+| Field Service | TicketController | ✅ | `/api/v1/field-service/` |
+| LMS | CourseController, EnrollmentController | ✅ | `/api/v1/lms/` |
+| POS | TerminalController, TransactionController | ✅ | `/api/v1/pos/` |
+| Fleet | VehicleController, DriverController, TripController, FuelLogController, MaintenanceController, PartController, PartCategoryController, PartUsageController | ✅ | `/api/v1/fleet/` |
+| Subscription | PlanController, SubscriptionController, UsageController | ✅ | `/api/v1/subscription/` |
+| Marketing | CampaignController, LeadController | ✅ | `/api/v1/marketing/` |
+| Network | ProfileController, DiscoveryController, FollowController, ConnectionController, FeedController, PostController | ✅ | `/api/v1/network/` |
+| Expenses | ExpenseController, ExpenseItemController | ✅ | `/api/v1/expenses/` |
+| Documents | DocumentController | ✅ | `/api/v1/documents/` |
+| Contracts | ContractController, ContractMilestoneController | ✅ | `/api/v1/contracts/` |
+| E-Signature | ESignatureController | ✅ | `/api/v1/esignatures/` |
+| Recruitment | RecruitmentController, PublicCandidateController | ✅ | `/api/v1/recruitment/` |
+| Training | TrainingController | ✅ | `/api/v1/training/` |
+| Notifications | NotificationEnhancedController, NotificationTemplateController | ✅ | `/api/v1/notifications/` |
+| Analytics | AnalyticsController, ModuleAnalyticsController | ✅ | `/api/v1/analytics/` |
+| Webhooks | WebhookController | ✅ | `/api/v1/webhooks/` |
+| AI Agents | AgentController, AgentTokenController, AgentSkillController, AgentExecutionController, AgentScheduleController | ✅ | `/api/v1/agents/` |
+| Onboarding | OnboardingController | ✅ | `/api/v1/onboarding/` |
 
 ## Adding a New Module
 
@@ -154,3 +186,13 @@ SQLite enforces CHECK constraints that match the migration enums exactly. Use th
 | fleet_fuel_logs | fuel_type | `gasoline` `diesel` `electric` `hybrid` `other` |
 | fleet_maintenance_records | type | `preventive` `corrective` `emergency` `inspection` |
 | fleet_maintenance_records | status | `scheduled` `in_progress` `completed` `cancelled` |
+
+## Code Conventions
+
+- **API versioning**: All endpoints under `/api/v1/`. Legacy `/api/auth/*` routes maintained for backward compat.
+- **Response format**: Always use `BaseApiController` response helpers — never return raw arrays.
+- **Permissions**: Apply `permission:module.action` middleware to all route groups.
+- **Testing**: Every new module must have minimum 70% test coverage.
+- **Caching**: Every new feature must consider caching strategy.
+- **AI agents**: Completely optional — no agent code affects ERP operation. Enable per-company via admin panel.
+- **Code formatting**: Use Laravel Pint (`./vendor/bin/pint`).

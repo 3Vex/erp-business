@@ -13,7 +13,7 @@ class EmailDeliveryService
         string $message,
         ?string $fromName = null,
     ): bool {
-        $fromName ??= config('app.name', 'TPT ERP');
+        $fromName ??= config('app.name', 'ERP System');
 
         Mail::to($toEmail)->send(new NotificationMail(
             subject: $subject,

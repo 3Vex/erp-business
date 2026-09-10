@@ -1,216 +1,224 @@
-# TPT Free ERP
+# Enterprise Resource Planning (ERP) System
 
-Open-source Enterprise Resource Planning system built on **Laravel 13.8** (PHP 8.3+). Covers Finance, Inventory, HR, Sales, Procurement, Manufacturing, Projects, Quality, Asset Management, Field Service, and LMS — 60+ REST API endpoints, 191 passing tests, interactive Swagger UI.
+An open-source Enterprise Resource Planning (ERP) system built on **Laravel 13.8** (PHP 8.3+) and **Vue 3**. Designed for scalability, modularity, and high performance, covering Finance, HR, Inventory, Sales, Procurement, Manufacturing, Projects, Quality Management, Assets, Field Service, LMS, and AI Agents.
 
 ---
 
-## Quick Start
+## 🚀 Quick Start & Setup Guide
 
-### Prerequisites
+### 📋 Prerequisites
 
-| Tool | Version | Download |
-|------|---------|----------|
-| PHP | 8.3+ | [php.net](https://windows.php.net/) (Windows) or [php.net/downloads](https://www.php.net/downloads) |
-| Composer | 2.x | [getcomposer.org](https://getcomposer.org/) |
-| Node.js | 18+ | [nodejs.org](https://nodejs.org/) |
-| Git | any | [git-scm.com](https://git-scm.com/) |
+Ensure your development environment meets the following requirements:
 
-### One-command install
+* **PHP:** 8.3 or higher (with `pdo`, `mbstring`, `openssl`, `tokenizer`, `xml`, `curl` extensions)
+* **Composer:** 2.x
+* **Node.js:** 18.x or higher (LTS recommended) & `npm`
+* **Database:** MySQL 8.0+, PostgreSQL 14+, or SQLite 3.35+
+
+---
+
+### 🔨 Installation Steps
+
+#### Step 1: Clone Repository & Install Dependencies
 
 ```bash
-git clone https://github.com/PhillipC05/tpt-free-erp.git
-cd tpt-free-erp
-composer run setup
+git clone <repository-url>
+cd erp-business
+
+# Install PHP dependencies
+composer install
+
+# Install Node.js dependencies
+npm install
 ```
 
-`composer run setup` does everything: installs PHP and JS dependencies, copies `.env`, generates the app key, creates the SQLite database, runs all migrations, and builds the frontend.
+#### Step 2: Environment Configuration
 
-### Start the dev server
+Copy the example environment file and generate the application encryption key:
 
 ```bash
-composer run dev
+# Copy environment file
+cp .env.example .env
+
+# Generate application key
+php artisan key:generate
 ```
 
-Opens four concurrent processes (PHP server, queue, log viewer, Vite). Visit **http://localhost:8000**.
+#### Step 3: Database Setup
+
+Choose your preferred database engine below and follow its setup instructions.
 
 ---
 
-## Windows Installation (Step by Step)
+### 🗄️ Database Configuration Guide
 
-1. **Install PHP 8.3+** from [windows.php.net](https://windows.php.net/download/) and **Composer** from [getcomposer.org](https://getcomposer.org/)
-2. **Install Node.js** from [nodejs.org](https://nodejs.org/) (LTS)
-3. Open **PowerShell** and run:
+#### 🔹 Option 1: MySQL Setup
 
-```powershell
-git clone https://github.com/PhillipC05/tpt-free-erp.git
-cd tpt-free-erp
-composer run setup
-composer run dev
+1. **Create Database:**
+
+```sql
+CREATE DATABASE erp_db CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 ```
 
-4. Open **http://localhost:8000**
-
-> **No MySQL required.** The default setup uses SQLite, so there's nothing extra to install or configure.
-
-### Alternative: install script
-
-A PowerShell script is included that checks prerequisites for you:
-
-```powershell
-.\install.ps1
-```
-
-It verifies prerequisites, runs setup, and prints the URL when done.
-
----
-
-## Configuration
-
-The setup command copies `.env.example` → `.env`. Key settings you may want to change:
+2. **Configure `.env` File:**
 
 ```env
-APP_NAME="TPT Free ERP"
-APP_URL=http://localhost:8000
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=erp_db
+DB_USERNAME=root
+DB_PASSWORD=
+```
 
-# Default: SQLite (no extra setup)
-DB_CONNECTION=sqlite
+3. **Run Migrations and Seed Database:**
 
-# Switch to MySQL
-# DB_CONNECTION=mysql
-# DB_HOST=127.0.0.1
-# DB_DATABASE=tpt_erp
-# DB_USERNAME=root
-# DB_PASSWORD=
-
-# Redis caching (optional but recommended for production)
-# CACHE_STORE=redis
-# REDIS_HOST=127.0.0.1
+```bash
+php artisan migrate --seed
 ```
 
 ---
 
-## Commands
+#### 🔹 Option 2: PostgreSQL Setup
+
+1. **Create Database:**
+
+```sql
+CREATE DATABASE erp_db;
+```
+*(Or via PostgreSQL CLI: `createdb -U postgres erp_db`)*
+
+2. **Configure `.env` File:**
+
+```env
+DB_CONNECTION=pgsql
+DB_HOST=127.0.0.1
+DB_PORT=5432
+DB_DATABASE=erp_db
+DB_USERNAME=postgres
+DB_PASSWORD=your_password
+```
+
+3. **Run Migrations and Seed Database:**
 
 ```bash
-# First-time setup (runs everything)
-composer run setup
+php artisan migrate --seed
+```
 
-# Start full dev environment (server + queue + logs + Vite)
-composer run dev
+---
 
-# Run all 191 tests
-composer run test
+#### 🔹 Option 3: SQLite Setup (Lightweight / Local Development)
 
-# Run a single test file or filter
-php artisan test tests/Feature/Finance/AccountTest.php
-php artisan test --filter test_can_create_customer
+1. **Create SQLite Database File:**
 
-# Database
-php artisan migrate
-php artisan migrate:fresh --seed   # reset + seed
+* **Linux / macOS / Git Bash:**
+  ```bash
+  touch database/database.sqlite
+  ```
+* **Windows PowerShell:**
+  ```powershell
+  New-Item -Path database/database.sqlite -ItemType File
+  ```
 
-# Code formatting (Laravel Pint)
+2. **Configure `.env` File:**
+
+```env
+DB_CONNECTION=sqlite
+# DB_DATABASE path is optional if using Laravel default (database/database.sqlite)
+```
+
+3. **Run Migrations and Seed Database:**
+
+```bash
+php artisan migrate --seed
+```
+
+---
+
+#### Step 4: Run Application
+
+Start the backend and frontend dev servers in **two separate terminal windows**:
+
+* **Terminal 1 (Vite Dev Server):**
+  ```bash
+  npm run dev
+  ```
+
+* **Terminal 2 (Laravel API Server):**
+  ```bash
+  php artisan serve
+  ```
+
+Visit the application at: **`http://127.0.0.1:8000/`**
+
+---
+
+## 📑 Core Modules & Features
+
+| Module | Features & Scope |
+|---|---|
+| **Finance** | Chart of Accounts, General Ledger, Journal Entries, Budgeting, Financial Reporting |
+| **Inventory** | Product Management, Stock Movements, Warehouse Management, Valuation Methods (FIFO, LIFO, Average) |
+| **HR & Payroll** | Employee Directory, Attendance, Leave Requests, Payroll Processing, Self-Service |
+| **Sales & CRM** | Customer Directory, Quotations, Sales Orders, Invoicing, Sales Analytics |
+| **Procurement** | Vendor Management, Purchase Orders, Goods Receipt |
+| **Manufacturing** | Bill of Materials (BOM), Work Orders, Production Tracking |
+| **Projects** | Project Planning, Task Management, Time Tracking, Milestones |
+| **Quality** | Quality Checks (Incoming, In-process, Final), Non-Conformance Tracking |
+| **Assets** | Asset Lifecycle, Straight-Line Depreciation, Maintenance Scheduling |
+| **Field Service** | Ticket Dispatch, Field Logs, Service Tracking |
+| **LMS** | Course Management, Enrollments, Employee Training |
+| **AI Agents** | Optional AI Automation infrastructure supporting Ollama & OpenRouter |
+
+---
+
+## 🛠️ Common Developer Commands
+
+```bash
+# Run all automated test suites
+php artisan test
+
+# Run a specific test class or filter
+php artisan test --filter AccountTest
+
+# Database refresh with seed data
+php artisan migrate:fresh --seed
+
+# Code style formatting (Laravel Pint)
 ./vendor/bin/pint
 
-# Regenerate OpenAPI docs
+# Regenerate OpenAPI / Swagger documentation
 php artisan l5-swagger:generate
 
-# List all API routes
+# View registered API routes
 php artisan route:list --path=api
-
-# Bundle size analysis
-npm run build:analyze
 ```
-
-### Bundle Analysis
-
-Run `npm run build:analyze` to generate an interactive treemap (`bundle-stats.html`) showing chunk sizes and dependencies. Use this to identify large imports and optimize the bundle.
 
 ---
 
-## API
+## 📚 API Documentation
 
-All endpoints live under `/api/` and require a Sanctum Bearer token.
+All API endpoints follow RESTful standards under `/api/v1/` and are secured via **Laravel Sanctum**.
 
-**Get a token:**
-```bash
-POST /api/auth/login
-{ "email": "user@example.com", "password": "password" }
-```
-
-**Interactive docs:** `http://localhost:8000/api/documentation`
-
-**Modules and key endpoints:**
-
-| Module | Base path | Highlights |
-|--------|-----------|------------|
-| Auth | `/api/auth/` | Login, register, logout, profile |
-| Finance | `/api/finance/` | Accounts, transactions, journal entries, balance sheet |
-| Inventory | `/api/inventory/` | Products, warehouses, stock movements |
-| HR | `/api/hr/` | Employees, departments, leave, payroll, attendance |
-| Sales | `/api/sales/` | Customers, orders, invoices, CRM pipeline |
-| Procurement | `/api/procurement/` | Vendors, purchase orders |
-| Manufacturing | `/api/manufacturing/` | BOMs, work orders |
-| Projects | `/api/projects/` | Projects, tasks, time entries |
-| Quality | `/api/quality/` | Checks (pass/fail/conditional), non-conformances |
-| Assets | `/api/assets/` | Asset lifecycle, straight-line depreciation, maintenance |
-| Field Service | `/api/field-service/` | Service tickets |
-| LMS | `/api/lms/` | Courses, enrollments |
-| Reports | `/api/reports/` | Cross-module report generation |
+Interactive Swagger API documentation is available at:
+`http://127.0.0.1:8000/api/documentation`
 
 ---
 
-## Architecture
+## 🧪 Testing
 
-```
-app/
-├── Http/Controllers/Api/     # 27 API controllers (one per module)
-│   ├── BaseApiController.php # Shared CRUD, validation, Redis cache helpers
-│   ├── OpenApiSpec.php       # Swagger annotations (59 documented paths)
-│   └── {Module}/
-├── Models/{Module}/          # Eloquent models
-├── Services/{Module}/        # Business logic services
-└── Exceptions/               # Custom exception hierarchy
-
-database/
-├── migrations/               # 9 migration files (full ERP schema + indexes)
-└── factories/                # 24 model factories
-
-tests/Feature/                # 191 feature tests (12 modules)
-resources/js/                 # Vue 3 + Pinia frontend
-routes/api.php                # 60+ API routes
-```
-
-**Stack:** Laravel 13.8 · PHP 8.3 · SQLite/MySQL/PostgreSQL · Vue 3 · Pinia · Vite · Tailwind CSS 4 · Laravel Sanctum · Swagger UI
-
-**Performance:** Redis tag-based cache invalidation, 65+ database indexes on all filter/FK columns.
-
----
-
-## Testing
-
-Tests use an **in-memory SQLite database** — no database setup needed.
+The test suite works out-of-the-box for all supported databases (MySQL, PostgreSQL, SQLite, etc.) without affecting your production or development database.
 
 ```bash
-composer run test         # all 191 tests
-php artisan test --filter Sales   # filter by name
+# Run full test suite
+php artisan test
+
+# Run specific module or test file
+php artisan test --filter AccountTest
 ```
 
-Coverage: Auth, Finance, Inventory, HR, Sales, Procurement, Manufacturing, Projects, Quality, Assets, Field Service, LMS.
-
 ---
 
-## Contributing
+## 📄 License
 
-1. Fork the repo and create a branch
-2. Write tests for any new feature (`tests/Feature/{Module}/`)
-3. Run `./vendor/bin/pint` to format code
-4. Open a PR — all 191 tests must pass
-
----
-
-## License
-
-Apache License 2.0 — see [LICENSE](LICENSE)
-
-Copyright 2025 [TPT Solutions](https://github.com/TPT-Solutions)
+This project is open-source software licensed under the [Apache License 2.0](LICENSE).

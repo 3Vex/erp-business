@@ -14,7 +14,7 @@ const CONFIG = {
 
     // Application Settings
     APP: {
-        NAME: 'TPT Free ERP',
+        NAME: 'ERP Business System',
         VERSION: '1.0.0',
         ENVIRONMENT: 'development', // development, staging, production
         DEBUG: true,
@@ -172,7 +172,7 @@ const CONFIG = {
 if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
     CONFIG.APP.ENVIRONMENT = 'development';
     CONFIG.APP.DEBUG = true;
-    CONFIG.API.BASE_URL = 'http://localhost:8000/api/v1';
+    CONFIG.API.BASE_URL = 'http://127.0.0.1:8000/api/v1';
 } else if (window.location.hostname.includes('staging')) {
     CONFIG.APP.ENVIRONMENT = 'staging';
     CONFIG.APP.DEBUG = false;

@@ -7,13 +7,13 @@
                 <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">Manage roles and permissions for system users</p>
             </div>
             <div class="flex items-center gap-2">
-                <button @click="inviteModalOpen = true"
+                <router-link to="/admin/users"
                     class="inline-flex items-center gap-2 px-4 py-2 bg-green-600 hover:bg-green-700 text-white text-sm font-medium rounded-lg transition-colors">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 43a8 8 0 100-16 8 8 0 000 16zM12 11a4 4 0 100-8 4 4 0 000 8z" />
                     </svg>
-                    Invite User
-                </button>
+                    Manage Users
+                </router-link>
                 <button @click="openCreateModal"
                     class="inline-flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium rounded-lg transition-colors">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">

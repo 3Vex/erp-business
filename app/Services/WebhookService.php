@@ -41,7 +41,7 @@ class WebhookService
             'payload' => [
                 'event' => 'webhook.test',
                 'timestamp' => now()->toIso8601String(),
-                'message' => 'This is a test delivery from TPT Free ERP.',
+                'message' => 'This is a test delivery from ERP Business System.',
             ],
             'status' => 'pending',
             'attempts' => 0,

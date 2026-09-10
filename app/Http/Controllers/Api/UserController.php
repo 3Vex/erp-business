@@ -16,7 +16,7 @@ class UserController extends BaseApiController
 
     public function index(Request $request): JsonResponse
     {
-        $query = User::query();
+        $query = User::with('roles');
 
         if ($request->has('search')) {
             $search = $request->query('search');
@@ -46,7 +46,8 @@ class UserController extends BaseApiController
         $error = $this->validate($request->all(), [
             'name' => 'required|string|max:255',
             'email' => 'required|email|unique:users,email',
-            'password' => 'required|string|min:8|confirmed',
+            'password' => 'required|string|min:6',
+            'role_id' => 'nullable|integer|exists:roles,id',
         ]);
         if ($error) {
             return $error;
@@ -58,12 +59,22 @@ class UserController extends BaseApiController
             'password' => Hash::make($request->password),
         ]);
 
-        return $this->respondCreated($user, 'User created successfully');
+        if ($request->filled('role_id')) {
+            $user->roles()->sync([
+                $request->role_id => [
+                    'assigned_at' => now(),
+                    'assigned_by' => auth()->id(),
+                ],
+            ]);
+            $user->flushPermissionCache();
+        }
+
+        return $this->respondCreated($user->load('roles'), 'User created successfully');
     }
 
     public function show(int $user): JsonResponse
     {
-        $record = User::find($user);
+        $record = User::with('roles')->find($user);
         if (! $record) {
             return $this->respondNotFound();
         }
@@ -81,20 +92,35 @@ class UserController extends BaseApiController
         $error = $this->validate($request->all(), [
             'name' => 'sometimes|required|string|max:255',
             'email' => 'sometimes|required|email|unique:users,email,'.$user,
-            'password' => 'sometimes|required|string|min:8|confirmed',
+            'password' => 'nullable|string|min:6',
+            'role_id' => 'nullable|integer|exists:roles,id',
         ]);
         if ($error) {
             return $error;
         }
 
         $data = $request->only(['name', 'email']);
-        if ($request->has('password')) {
+        if ($request->filled('password')) {
             $data['password'] = Hash::make($request->password);
         }
 
         $record->update($data);
 
-        return $this->respondSuccess('User updated', $record->fresh());
+        if ($request->has('role_id')) {
+            if ($request->filled('role_id')) {
+                $record->roles()->sync([
+                    $request->role_id => [
+                        'assigned_at' => now(),
+                        'assigned_by' => auth()->id(),
+                    ],
+                ]);
+            } else {
+                $record->roles()->detach();
+            }
+            $record->flushPermissionCache();
+        }
+
+        return $this->respondSuccess('User updated', $record->fresh('roles'));
     }
 
     public function destroy(int $user): JsonResponse

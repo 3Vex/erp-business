@@ -310,6 +310,7 @@ const routes: RouteRecordRaw[] = [
             // Developer Portal
             { path: 'developer', name: 'developer.portal', component: () => import('@/views/developer/DeveloperPortalView.vue') },
             // Admin
+            { path: 'admin/users', name: 'admin.users', component: () => import('@/views/admin/UsersView.vue') },
             { path: 'admin/roles', name: 'admin.roles', component: () => import('@/views/admin/RolesView.vue') },
         ],
     },

@@ -2,7 +2,6 @@
 
 /**
  * Security Configuration
- * TPT Open ERP
  */
 
 return [
