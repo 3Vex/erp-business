@@ -322,12 +322,6 @@ const routes: RouteRecordRaw[] = [
         meta: { guest: false }, // allow all (auth not required)
     },
     {
-        path: '/onboarding',
-        name: 'onboarding',
-        component: () => import('@/views/onboarding/OnboardingWizardView.vue'),
-        meta: { requiresAuth: true },
-    },
-    {
         path: '/:pathMatch(.*)*',
         name: 'not-found',
         component: () => import('@/views/errors/NotFoundView.vue'),

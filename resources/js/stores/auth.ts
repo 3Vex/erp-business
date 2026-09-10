@@ -8,7 +8,6 @@ export const useAuthStore = defineStore('auth', () => {
     const user = ref<User | null>(null);
     const token = ref<string | null>(localStorage.getItem('auth_token'));
     const loading = ref(false);
-    const onboardingPending = ref(false);
 
     const isAuthenticated = computed(() => !!token.value);
     const userData = computed(() => user.value);
@@ -37,15 +36,6 @@ export const useAuthStore = defineStore('auth', () => {
         }
     }
 
-    async function checkOnboardingStatus() {
-        try {
-            const res = await apiClient.get('/v1/onboarding/status');
-            onboardingPending.value = (res.data?.data?.status ?? '') === 'pending';
-        } catch {
-            onboardingPending.value = false;
-        }
-    }
-
     async function login(email: string, password: string, remember: boolean = false) {
         loading.value = true;
         try {
@@ -54,7 +44,6 @@ export const useAuthStore = defineStore('auth', () => {
             user.value = response.user;
             localStorage.setItem('auth_token', response.token);
             localStorage.setItem('auth_user', JSON.stringify(response.user));
-            await checkOnboardingStatus();
             return response;
         } finally {
             loading.value = false;
@@ -92,7 +81,6 @@ export const useAuthStore = defineStore('auth', () => {
         user,
         token,
         loading,
-        onboardingPending,
         isAuthenticated,
         userData,
         hasRole,
@@ -101,6 +89,5 @@ export const useAuthStore = defineStore('auth', () => {
         login,
         register,
         logout,
-        checkOnboardingStatus,
     };
 });

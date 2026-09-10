@@ -11,16 +11,19 @@ The project runs fully on Laravel. Legacy framework code (`core/`, `api/`, `modu
 ## Commands
 
 ```bash
-# First-time setup (installs deps, creates .env, creates SQLite DB, migrates, builds frontend)
-composer run setup
+# Setup & installation
+composer install
+npm install
+cp .env.example .env
+php artisan key:generate
+php artisan migrate --seed
 
-# Start full dev environment (PHP server + queue + log viewer + Vite, concurrently)
-composer run dev
+# Run dev environment (2 separate terminals)
+npm run dev
+php artisan serve
 
-# Run all tests (560 passing, in-memory SQLite — no DB setup needed)
-composer run test
-
-# Run a single test or filter by name
+# Run automated tests
+php artisan test
 php artisan test --filter TestName
 php artisan test tests/Feature/Finance/AccountTest.php
 
@@ -136,7 +139,6 @@ $this->getJson('/api/...', ['Authorization' => "Bearer {$token}"]);
 | Analytics | AnalyticsController, ModuleAnalyticsController | ✅ | `/api/v1/analytics/` |
 | Webhooks | WebhookController | ✅ | `/api/v1/webhooks/` |
 | AI Agents | AgentController, AgentTokenController, AgentSkillController, AgentExecutionController, AgentScheduleController | ✅ | `/api/v1/agents/` |
-| Onboarding | OnboardingController | ✅ | `/api/v1/onboarding/` |
 
 ## Adding a New Module
 

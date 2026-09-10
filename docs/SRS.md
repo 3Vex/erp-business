@@ -866,10 +866,13 @@ All modules have dedicated Vue views in `resources/js/views/{module}/`:
 ### 13.3 Setup Commands
 
 ```bash
-composer run setup    # One-command first-time setup
-composer run dev      # PHP server + queue + log viewer + Vite
-composer run test     # All tests (in-memory SQLite)
-./vendor/bin/pint     # Code formatting
+composer install && npm install    # Install dependencies
+cp .env.example .env && php artisan key:generate   # Configure env & app key
+php artisan migrate --seed         # Run migrations & seed database
+npm run dev                        # Start Vite dev server (Terminal 1)
+php artisan serve                  # Start Laravel API server (Terminal 2)
+php artisan test                   # Run automated tests
+./vendor/bin/pint                  # Code formatting
 ```
 
 ---
@@ -1035,9 +1038,9 @@ Finance, Inventory, HR, Sales, Procurement, Manufacturing, Projects, Quality, As
 - CSRF protection
 
 **Developer Experience:**
-- `composer run setup` — one-command setup
-- `composer run dev` — full dev environment
-- `composer run test` — 191 tests in < 30s
+- Step-by-step manual setup (`composer install`, `npm install`)
+- Dual-server development workflow (`npm run dev`, `php artisan serve`)
+- Automated test suite (`php artisan test`)
 - Laravel Pint formatting
 - 65+ database indexes
 

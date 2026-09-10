@@ -594,11 +594,6 @@ onMounted(() => {
     fetchUnreadCount();
     pollInterval = setInterval(fetchUnreadCount, 60000);
     document.addEventListener('mousedown', handleOutsideClick);
-
-    // Redirect to onboarding if setup is not yet complete
-    if (authStore.onboardingPending && route.path !== '/onboarding') {
-        router.push('/onboarding');
-    }
 });
 
 onUnmounted(() => {
