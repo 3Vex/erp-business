@@ -19,7 +19,7 @@ class OpenRouterService
     {
         $this->apiKey = config('ai.openrouter_api_key', '');
         $this->siteUrl = config('app.url', 'http://localhost');
-        $this->siteName = config('app.name', 'TPT Free ERP');
+        $this->siteName = config('app.name', 'ERP System');
     }
 
     public function chat(string $model, array $messages, array $options = []): array

@@ -1,5 +1,5 @@
 /**
- * TPT Free ERP - Navigation Component
+ * ERP System - Navigation Component
  * Advanced navigation system with menus, breadcrumbs, and responsive design
  */
 
@@ -234,7 +234,7 @@ class Navigation extends Component {
         logo.innerHTML = '<i class="fas fa-cogs"></i>';
 
         const title = DOM.create('span', { className: 'nav-title' });
-        title.textContent = collapsed ? 'TPT' : 'TPT ERP';
+        title.textContent = collapsed ? 'ERP' : 'ERP System';
 
         brand.appendChild(logo);
         brand.appendChild(title);
@@ -275,7 +275,7 @@ class Navigation extends Component {
         const brand = DOM.create('div', { className: 'nav-brand' });
         const logo = DOM.create('div', { className: 'nav-logo' });
         logo.innerHTML = '<i class="fas fa-cogs"></i>';
-        const title = DOM.create('span', { className: 'nav-title' }, 'TPT ERP');
+        const title = DOM.create('span', { className: 'nav-title' }, 'ERP System');
         brand.appendChild(logo);
         brand.appendChild(title);
         left.appendChild(brand);

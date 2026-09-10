@@ -1,5 +1,5 @@
 /**
- * TPT Free ERP - Notification Component
+ * ERP System - Notification Component
  * Advanced notification and alert system with various types and display modes
  */
 

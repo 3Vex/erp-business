@@ -1,5 +1,5 @@
 /**
- * TPT Free ERP - Reporting Component
+ * ERP System - Reporting Component
  * Complete business intelligence, custom reports, and data visualization interface
  */
 

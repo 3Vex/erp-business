@@ -1,5 +1,5 @@
 /**
- * TPT Free ERP - Login Form Component
+ * ERP System - Login Form Component
  * Handles user authentication with validation and error handling
  */
 
@@ -7,7 +7,7 @@ class LoginForm extends Component {
     constructor(props = {}) {
         super(props);
         this.props = {
-            title: 'Login to TPT ERP',
+            title: 'Login to ERP System',
             subtitle: 'Enter your credentials to access your account',
             showRememberMe: true,
             showForgotPassword: true,

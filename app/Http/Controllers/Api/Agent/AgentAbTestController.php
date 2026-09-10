@@ -21,7 +21,7 @@ class AgentAbTestController extends BaseApiController
 
     public function index(Request $request): JsonResponse
     {
-        $query = AgentAbTest::with(['agenofile:id,name', 'creator:id,name'])
+        $query = AgentAbTest::with(['AgentProfile:id,name', 'creator:id,name'])
             ->when($request->query('status'), fn ($q, $s) => $q->where('status', $s))
             ->when($request->query('agent_profile_id'), fn ($q, $id) => $q->where('agent_profile_id', $id))
             ->orderByDesc('created_at');
@@ -69,7 +69,7 @@ class AgentAbTestController extends BaseApiController
 
     public function show(int $id): JsonResponse
     {
-        $test = AgentAbTest::with(['agenofile:id,name', 'creator:id,name', 'results'])
+        $test = AgentAbTest::with(['AgentProfile:id,name', 'creator:id,name', 'results'])
             ->find($id);
 
         if (! $test) {

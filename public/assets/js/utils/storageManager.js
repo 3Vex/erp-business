@@ -1,12 +1,12 @@
 /**
- * TPT Free ERP - Storage Manager Utility
+ * ERP System - Storage Manager Utility
  * Comprehensive localStorage/sessionStorage wrapper with data persistence, cache management, and validation
  */
 
 class StorageManager {
     constructor(options = {}) {
         this.options = {
-            prefix: 'tpt_erp_',
+            prefix: 'ERP_erp_',
             defaultStorage: 'localStorage', // 'localStorage' or 'sessionStorage'
             compress: false,
             encrypt: false,
@@ -672,7 +672,7 @@ class StorageManager {
         return {
             // Default configuration
             default: {
-                prefix: 'tpt_erp_',
+                prefix: 'ERP_erp_',
                 defaultStorage: 'localStorage',
                 compress: false,
                 encrypt: false,
@@ -682,7 +682,7 @@ class StorageManager {
 
             // Secure configuration
             secure: {
-                prefix: 'tpt_secure_',
+                prefix: 'ERP_secure_',
                 defaultStorage: 'sessionStorage',
                 compress: true,
                 encrypt: true,
@@ -692,7 +692,7 @@ class StorageManager {
 
             // Cache configuration
             cache: {
-                prefix: 'tpt_cache_',
+                prefix: 'ERP_cache_',
                 defaultStorage: 'sessionStorage',
                 compress: false,
                 encrypt: false,
@@ -702,7 +702,7 @@ class StorageManager {
 
             // Persistent configuration
             persistent: {
-                prefix: 'tpt_persist_',
+                prefix: 'ERP_persist_',
                 defaultStorage: 'localStorage',
                 compress: true,
                 encrypt: false,

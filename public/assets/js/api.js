@@ -1,5 +1,5 @@
 /**
- * TPT Free ERP - API Client
+ * ERP System - API Client
  * Handles all HTTP communication with the backend API
  */
 

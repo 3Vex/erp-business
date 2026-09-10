@@ -10,7 +10,7 @@ class RegisterTest extends TestCase
 {
     use RefreshDatabase;
 
-    public function test_user_can_register_with_valid_data(): void
+    public function test_public_registration_is_disabled_invite_only(): void
     {
         $response = $this->postJson('/api/auth/register', [
             'name' => 'John Doe',
@@ -19,52 +19,7 @@ class RegisterTest extends TestCase
             'password_confirmation' => 'password123',
         ]);
 
-        $response->assertCreated()
-            ->assertJsonStructure(['success', 'data' => ['token', 'user']])
-            ->assertJson(['success' => true]);
-
-        $this->assertDatabaseHas('users', ['email' => 'john@example.com']);
-    }
-
-    public function test_registration_fails_with_duplicate_email(): void
-    {
-        User::factory()->create(['email' => 'existing@example.com']);
-
-        $response = $this->postJson('/api/auth/register', [
-            'name' => 'Another User',
-            'email' => 'existing@example.com',
-            'password' => 'password123',
-            'password_confirmation' => 'password123',
-        ]);
-
-        $response->assertUnprocessable()
-            ->assertJsonValidationErrors(['email']);
-    }
-
-    public function test_registration_fails_when_passwords_dont_match(): void
-    {
-        $response = $this->postJson('/api/auth/register', [
-            'name' => 'John Doe',
-            'email' => 'john@example.com',
-            'password' => 'password123',
-            'password_confirmation' => 'different',
-        ]);
-
-        $response->assertUnprocessable()
-            ->assertJsonValidationErrors(['password']);
-    }
-
-    public function test_registration_requires_minimum_password_length(): void
-    {
-        $response = $this->postJson('/api/auth/register', [
-            'name' => 'John Doe',
-            'email' => 'john@example.com',
-            'password' => 'short',
-            'password_confirmation' => 'short',
-        ]);
-
-        $response->assertUnprocessable()
-            ->assertJsonValidationErrors(['password']);
+        $response->assertNotFound();
     }
 
     public function test_authenticated_user_can_retrieve_own_profile(): void

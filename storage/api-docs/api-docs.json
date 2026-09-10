@@ -1,14 +1,14 @@
 {
     "openapi": "3.0.0",
     "info": {
-        "title": "TPT Free ERP API",
+        "title": "RIS Free ERP API",
         "description": "Open-source Enterprise Resource Planning REST API. Finance, Inventory, HR, Sales, Procurement, Manufacturing, Projects, Quality, Assets, Field Service, and LMS.",
         "contact": {
-            "email": "support@tpt-erp.com"
+            "email": "support@tptsolutions.co.nz"
         },
         "license": {
-            "name": "MIT",
-            "url": "https://opensource.org/licenses/MIT"
+            "name": "Apache-2.0",
+            "url": "https://www.apache.org/licenses/LICENSE-2.0"
         },
         "version": "1.0.0"
     },
@@ -3386,6 +3386,3679 @@
                     }
                 ]
             }
+        },
+        "/v1/reports/generate": {
+            "post": {
+                "tags": [
+                    "Reports"
+                ],
+                "summary": "Queue a report for async generation",
+                "operationId": "77fedfa6d9f920ba3298796e15f0ba4a",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "report_type",
+                                    "format"
+                                ],
+                                "properties": {
+                                    "report_type": {
+                                        "type": "string",
+                                        "enum": [
+                                            "trial_balance",
+                                            "income_statement",
+                                            "balance_sheet",
+                                            "cash_flow",
+                                            "hr_attendance",
+                                            "hr_payroll",
+                                            "sales_summary",
+                                            "procurement"
+                                        ]
+                                    },
+                                    "format": {
+                                        "type": "string",
+                                        "enum": [
+                                            "json",
+                                            "csv",
+                                            "pdf"
+                                        ]
+                                    },
+                                    "date_from": {
+                                        "type": "string",
+                                        "format": "date"
+                                    },
+                                    "date_to": {
+                                        "type": "string",
+                                        "format": "date"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "202": {
+                        "description": "Report queued — returns report_id"
+                    },
+                    "422": {
+                        "description": "Validation error"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/v1/reports/{id}": {
+            "get": {
+                "tags": [
+                    "Reports"
+                ],
+                "summary": "Poll report status and retrieve result",
+                "operationId": "bca8788e63d11c3b88e9abe870e391db",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Report record with status (queued|running|completed|failed)"
+                    },
+                    "404": {
+                        "description": "Not found"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/v1/reports/{id}/download": {
+            "get": {
+                "tags": [
+                    "Reports"
+                ],
+                "summary": "Download completed report as JSON, CSV, or PDF",
+                "operationId": "7a56433a433f32820c0205c38ec1b8a6",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "File download"
+                    },
+                    "422": {
+                        "description": "Report not yet completed"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/v1/reports/scheduled": {
+            "get": {
+                "tags": [
+                    "Reports"
+                ],
+                "summary": "List scheduled reports for current user",
+                "operationId": "98d0c745a974f67bfae8d74255ca566f",
+                "responses": {
+                    "200": {
+                        "description": "List of scheduled reports"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Reports"
+                ],
+                "summary": "Create a scheduled report",
+                "operationId": "bb139263a6bd4b7ee7b288f03472ce09",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "name",
+                                    "report_type",
+                                    "format",
+                                    "frequency"
+                                ],
+                                "properties": {
+                                    "name": {
+                                        "type": "string"
+                                    },
+                                    "report_type": {
+                                        "type": "string"
+                                    },
+                                    "format": {
+                                        "type": "string",
+                                        "enum": [
+                                            "json",
+                                            "csv",
+                                            "pdf"
+                                        ]
+                                    },
+                                    "frequency": {
+                                        "type": "string",
+                                        "enum": [
+                                            "daily",
+                                            "weekly",
+                                            "monthly"
+                                        ]
+                                    },
+                                    "delivery_email": {
+                                        "type": "string",
+                                        "format": "email"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Scheduled report created"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/v1/reports/scheduled/{id}": {
+            "delete": {
+                "tags": [
+                    "Reports"
+                ],
+                "summary": "Delete a scheduled report",
+                "operationId": "cd1ce979fd3177e9a18c17f8f068b550",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Deleted"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/v1/agents": {
+            "get": {
+                "tags": [
+                    "Agents"
+                ],
+                "summary": "List agent profiles",
+                "operationId": "dac6470b6ad6cf781bf400811ad0c8e1",
+                "responses": {
+                    "200": {
+                        "description": "Paginated list of agents"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Agents"
+                ],
+                "summary": "Create an agent profile",
+                "operationId": "cb73fc823a69c9218f156b62d808133b",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "name",
+                                    "agent_type"
+                                ],
+                                "properties": {
+                                    "name": {
+                                        "type": "string",
+                                        "example": "Finance Bot"
+                                    },
+                                    "description": {
+                                        "type": "string"
+                                    },
+                                    "agent_type": {
+                                        "type": "string",
+                                        "enum": [
+                                            "local",
+                                            "openrouter",
+                                            "api",
+                                            "human_subcontractor"
+                                        ]
+                                    },
+                                    "provider_config": {
+                                        "description": "Model/API configuration",
+                                        "type": "object"
+                                    },
+                                    "is_active": {
+                                        "type": "boolean",
+                                        "default": true
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Agent created"
+                    },
+                    "422": {
+                        "description": "Validation error"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/v1/agents/{id}": {
+            "get": {
+                "tags": [
+                    "Agents"
+                ],
+                "summary": "Get agent with assigned skills",
+                "operationId": "5444ee6896ff447f274f04bda74b49d8",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Agent profile with skill assignments"
+                    },
+                    "404": {
+                        "description": "Not found"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "put": {
+                "tags": [
+                    "Agents"
+                ],
+                "summary": "Update agent profile",
+                "operationId": "0aecf91c904d29e3fa1e7c755ca17124",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Updated"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "Agents"
+                ],
+                "summary": "Soft-delete agent profile",
+                "operationId": "a3ce2a1d66d9534ddda6629cac7d86a7",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Deleted"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/v1/agents/{id}/tokens": {
+            "post": {
+                "tags": [
+                    "Agents"
+                ],
+                "summary": "Create a scoped API token for an agent",
+                "operationId": "1f57024e94e73e84c25cc2c7b827f922",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "name"
+                                ],
+                                "properties": {
+                                    "name": {
+                                        "type": "string"
+                                    },
+                                    "abilities": {
+                                        "type": "array",
+                                        "items": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "allowed_skill_slugs": {
+                                        "type": "array",
+                                        "items": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "rate_limit_per_minute": {
+                                        "type": "integer",
+                                        "default": 10
+                                    },
+                                    "expires_at": {
+                                        "type": "string",
+                                        "format": "date-time"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Token created — plain_token shown once"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/v1/agents/{id}/tokens/{tokenId}": {
+            "delete": {
+                "tags": [
+                    "Agents"
+                ],
+                "summary": "Revoke an agent token",
+                "operationId": "7aac83745edeadf62e7772d95c7e7dfd",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "tokenId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Token revoked"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/v1/agents/skills/available": {
+            "get": {
+                "tags": [
+                    "Agents"
+                ],
+                "summary": "Browse full skill catalog",
+                "operationId": "bf09218967111af4a74cae48205360d8",
+                "parameters": [
+                    {
+                        "name": "category",
+                        "in": "query",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "All available skills from the registry"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/v1/agents/skills/upload": {
+            "post": {
+                "tags": [
+                    "Agents"
+                ],
+                "summary": "Upload a new skill .md file (admin)",
+                "operationId": "e9999aa34bc893c3a06bb2c00f086d08",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "required": [
+                                    "skill_file"
+                                ],
+                                "properties": {
+                                    "skill_file": {
+                                        "type": "string",
+                                        "format": "binary"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Skill uploaded and registry cache cleared"
+                    },
+                    "422": {
+                        "description": "Validation error — missing frontmatter or invalid slug"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/v1/agents/{id}/skills": {
+            "get": {
+                "tags": [
+                    "Agents"
+                ],
+                "summary": "List skills assigned to an agent with registry metadata",
+                "operationId": "20cdb1c4adffdb2cb4c740dd0cf07864",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Agent skill assignments with full metadata"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/v1/agents/{id}/skills/{slug}": {
+            "put": {
+                "tags": [
+                    "Agents"
+                ],
+                "summary": "Enable or disable a skill for an agent",
+                "operationId": "6d8ba68a15f0cd24e4b470b0f19fc701",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "slug",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "is_enabled": {
+                                        "type": "boolean"
+                                    },
+                                    "config_overrides": {
+                                        "type": "object"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Assignment updated"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/v1/agents/{id}/skills/{slug}/run": {
+            "post": {
+                "tags": [
+                    "Agents"
+                ],
+                "summary": "Manually trigger a skill execution",
+                "operationId": "81865b15233c97f9dc34aa65d3156268",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "slug",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "input"
+                                ],
+                                "properties": {
+                                    "input": {
+                                        "description": "Skill input matching the skill's inputs schema",
+                                        "type": "object"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "202": {
+                        "description": "Execution queued — returns execution_id"
+                    },
+                    "404": {
+                        "description": "Agent or skill not found"
+                    },
+                    "422": {
+                        "description": "Skill disabled for this agent"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/v1/agents/{id}/executions": {
+            "get": {
+                "tags": [
+                    "Agents"
+                ],
+                "summary": "Paginated execution audit log for an agent",
+                "operationId": "571e30cc807f57d161cd8ce34efde562",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "status",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "queued",
+                                "running",
+                                "completed",
+                                "failed"
+                            ]
+                        }
+                    },
+                    {
+                        "name": "skill",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Paginated execution log"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/v1/agents/{id}/executions/{execId}": {
+            "get": {
+                "tags": [
+                    "Agents"
+                ],
+                "summary": "Get single execution detail",
+                "operationId": "b3337f890c43d332545f927770fbec7b",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "execId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Execution detail"
+                    },
+                    "404": {
+                        "description": "Not found"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/v1/agents/{id}/schedules": {
+            "get": {
+                "tags": [
+                    "Agents"
+                ],
+                "summary": "List schedules for an agent",
+                "operationId": "027311366b8929e4a3d7033ee3d964c2",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Agent schedules"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Agents"
+                ],
+                "summary": "Create a cron schedule for an agent skill",
+                "operationId": "a3d7336c6444bc0aaf36f0071b5ebacf",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "skill_slug"
+                                ],
+                                "properties": {
+                                    "skill_slug": {
+                                        "type": "string",
+                                        "example": "finance.extract_invoice"
+                                    },
+                                    "cron_expression": {
+                                        "type": "string",
+                                        "example": "0 9 * * 1"
+                                    },
+                                    "input_template": {
+                                        "type": "object"
+                                    },
+                                    "is_active": {
+                                        "type": "boolean",
+                                        "default": true
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Schedule created"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/v1/agents/{id}/schedules/{schedId}": {
+            "delete": {
+                "tags": [
+                    "Agents"
+                ],
+                "summary": "Delete an agent schedule",
+                "operationId": "33d39b6c1a10e81e45cc69194cb5057b",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "schedId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Deleted"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/v1/marketing/campaigns/{id}/roi": {
+            "get": {
+                "tags": [
+                    "Marketing"
+                ],
+                "summary": "Campaign ROI summary",
+                "operationId": "22b37871b3404856b443119dcc0b1916",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "ROI metrics",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean"
+                                        },
+                                        "data": {
+                                            "properties": {
+                                                "campaign_id": {
+                                                    "type": "integer"
+                                                },
+                                                "campaign_name": {
+                                                    "type": "string"
+                                                },
+                                                "budget": {
+                                                    "type": "number"
+                                                },
+                                                "total_cost": {
+                                                    "type": "number"
+                                                },
+                                                "total_revenue": {
+                                                    "type": "number"
+                                                },
+                                                "roi_percent": {
+                                                    "type": "number",
+                                                    "nullable": true
+                                                },
+                                                "roas": {
+                                                    "type": "number",
+                                                    "nullable": true
+                                                },
+                                                "cost_per_click": {
+                                                    "type": "number",
+                                                    "nullable": true
+                                                },
+                                                "cost_per_acquisition": {
+                                                    "type": "number",
+                                                    "nullable": true
+                                                },
+                                                "total_conversions": {
+                                                    "type": "integer"
+                                                },
+                                                "total_clicks": {
+                                                    "type": "integer"
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/v1/network/profile/avatar": {
+            "post": {
+                "tags": [
+                    "Network"
+                ],
+                "summary": "Upload profile avatar",
+                "operationId": "715717c42da5a1e00eb7f1d60eb98140",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "required": [
+                                    "avatar"
+                                ],
+                                "properties": {
+                                    "avatar": {
+                                        "description": "Image file (jpeg/png/gif/webp, max 2MB)",
+                                        "type": "string",
+                                        "format": "binary"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Avatar uploaded"
+                    },
+                    "422": {
+                        "description": "Validation error"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/v1/network/profiles/{id}": {
+            "get": {
+                "tags": [
+                    "Network"
+                ],
+                "summary": "View a public network profile",
+                "operationId": "c94275cbc34d7cdb922880823f2140bd",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Profile data"
+                    },
+                    "404": {
+                        "description": "Not found or private"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/v1/webhooks": {
+            "get": {
+                "tags": [
+                    "Webhooks"
+                ],
+                "summary": "List webhooks",
+                "operationId": "5c16cb64ddd5fd72e53bc414864c16c1",
+                "responses": {
+                    "200": {
+                        "description": "Webhook list"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Webhooks"
+                ],
+                "summary": "Create a webhook",
+                "operationId": "a639019a4fb8af9c53106dbf6bcc6b44",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "url",
+                                    "events"
+                                ],
+                                "properties": {
+                                    "url": {
+                                        "type": "string",
+                                        "format": "uri"
+                                    },
+                                    "secret": {
+                                        "type": "string"
+                                    },
+                                    "events": {
+                                        "type": "array",
+                                        "items": {
+                                            "type": "string"
+                                        },
+                                        "example": [
+                                            "sales.*"
+                                        ]
+                                    },
+                                    "is_active": {
+                                        "type": "boolean",
+                                        "default": true
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Webhook created"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/v1/webhooks/{id}": {
+            "get": {
+                "tags": [
+                    "Webhooks"
+                ],
+                "summary": "Get a webhook",
+                "operationId": "5f6ad5fd3a1c71b68956760102d7d5fc",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Webhook detail"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "put": {
+                "tags": [
+                    "Webhooks"
+                ],
+                "summary": "Update a webhook",
+                "operationId": "e2bf8f156cfc788cbb83c0e67b682f90",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": false,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "url": {
+                                        "type": "string",
+                                        "format": "uri"
+                                    },
+                                    "events": {
+                                        "type": "array",
+                                        "items": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "is_active": {
+                                        "type": "boolean"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Updated"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "Webhooks"
+                ],
+                "summary": "Delete a webhook",
+                "operationId": "26a6047dbf9ecb5fb6c061e7eb23364f",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Deleted"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/v1/webhooks/{id}/test": {
+            "post": {
+                "tags": [
+                    "Webhooks"
+                ],
+                "summary": "Send a test delivery",
+                "operationId": "f031307a99908fd354cf5962fde6036c",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Test delivery sent"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/v1/webhooks/{id}/deliveries": {
+            "get": {
+                "tags": [
+                    "Webhooks"
+                ],
+                "summary": "List delivery history for a webhook",
+                "operationId": "fbf25913d77ede57326ae6696521eb6e",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Delivery history"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/v1/pos/terminals": {
+            "get": {
+                "tags": [
+                    "POS"
+                ],
+                "summary": "List POS terminals",
+                "operationId": "bf24663d90ddc8743982aeef42c72465",
+                "parameters": [
+                    {
+                        "name": "status",
+                        "in": "query",
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "active",
+                                "inactive",
+                                "maintenance"
+                            ]
+                        }
+                    },
+                    {
+                        "name": "search",
+                        "in": "query",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "per_page",
+                        "in": "query",
+                        "schema": {
+                            "type": "integer",
+                            "default": 15
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Paginated terminal list"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "POS"
+                ],
+                "summary": "Create POS terminal",
+                "operationId": "6b3b4766e1c3eaba40863c75b28686c1",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "terminal_code",
+                                    "name"
+                                ],
+                                "properties": {
+                                    "terminal_code": {
+                                        "type": "string"
+                                    },
+                                    "name": {
+                                        "type": "string"
+                                    },
+                                    "warehouse_id": {
+                                        "type": "integer"
+                                    },
+                                    "assigned_to": {
+                                        "type": "integer"
+                                    },
+                                    "status": {
+                                        "type": "string",
+                                        "enum": [
+                                            "active",
+                                            "inactive",
+                                            "maintenance"
+                                        ]
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Created"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/v1/pos/terminals/{id}": {
+            "get": {
+                "tags": [
+                    "POS"
+                ],
+                "summary": "Get terminal",
+                "operationId": "0897a46af6c05582cfbe4805f034bd90",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Terminal"
+                    },
+                    "404": {
+                        "description": "Not found"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "put": {
+                "tags": [
+                    "POS"
+                ],
+                "summary": "Update terminal",
+                "operationId": "d6c2943423c4181daa3c3302f3691a2e",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Updated"
+                    },
+                    "404": {
+                        "description": "Not found"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "POS"
+                ],
+                "summary": "Delete terminal",
+                "operationId": "94bd046f0e266068f120e536ddd6c090",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Deleted"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/v1/pos/transactions": {
+            "get": {
+                "tags": [
+                    "POS"
+                ],
+                "summary": "List POS transactions",
+                "operationId": "2f8cf42698fddca7234271b8f1af51d3",
+                "parameters": [
+                    {
+                        "name": "terminal_id",
+                        "in": "query",
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "status",
+                        "in": "query",
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "open",
+                                "completed",
+                                "voided",
+                                "refunded"
+                            ]
+                        }
+                    },
+                    {
+                        "name": "customer_id",
+                        "in": "query",
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "start_date",
+                        "in": "query",
+                        "schema": {
+                            "type": "string",
+                            "format": "date"
+                        }
+                    },
+                    {
+                        "name": "end_date",
+                        "in": "query",
+                        "schema": {
+                            "type": "string",
+                            "format": "date"
+                        }
+                    },
+                    {
+                        "name": "per_page",
+                        "in": "query",
+                        "schema": {
+                            "type": "integer",
+                            "default": 15
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Paginated transaction list"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "POS"
+                ],
+                "summary": "Open a new POS transaction",
+                "operationId": "0f1b30c8991a049035290596a4be0c2a",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "terminal_id"
+                                ],
+                                "properties": {
+                                    "terminal_id": {
+                                        "type": "integer"
+                                    },
+                                    "customer_id": {
+                                        "type": "integer"
+                                    },
+                                    "employee_id": {
+                                        "type": "integer"
+                                    },
+                                    "currency": {
+                                        "type": "string",
+                                        "example": "USD"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Transaction opened"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/v1/pos/transactions/{id}": {
+            "get": {
+                "tags": [
+                    "POS"
+                ],
+                "summary": "Get transaction with items and payments",
+                "operationId": "8395fb81d30e0ae4531d11a9303f038c",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Transaction"
+                    },
+                    "404": {
+                        "description": "Not found"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/v1/pos/transactions/{id}/items": {
+            "post": {
+                "tags": [
+                    "POS"
+                ],
+                "summary": "Add item to open transaction",
+                "operationId": "5b5f7e70985ae4f1974c3ac061ae8116",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "description",
+                                    "quantity",
+                                    "unit_price"
+                                ],
+                                "properties": {
+                                    "product_id": {
+                                        "type": "integer"
+                                    },
+                                    "description": {
+                                        "type": "string"
+                                    },
+                                    "quantity": {
+                                        "type": "number"
+                                    },
+                                    "unit_price": {
+                                        "type": "number"
+                                    },
+                                    "discount_percent": {
+                                        "type": "number",
+                                        "default": 0
+                                    },
+                                    "tax_percent": {
+                                        "type": "number",
+                                        "default": 0
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Item added"
+                    },
+                    "422": {
+                        "description": "Transaction not open"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/v1/pos/transactions/{id}/checkout": {
+            "post": {
+                "tags": [
+                    "POS"
+                ],
+                "summary": "Complete checkout with payments",
+                "operationId": "950e2ee76d1da8f1b30246228d6a0f2a",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "payments"
+                                ],
+                                "properties": {
+                                    "payments": {
+                                        "type": "array",
+                                        "items": {
+                                            "properties": {
+                                                "method": {
+                                                    "type": "string",
+                                                    "enum": [
+                                                        "cash",
+                                                        "card",
+                                                        "bank_transfer",
+                                                        "digital_wallet",
+                                                        "other"
+                                                    ]
+                                                },
+                                                "amount": {
+                                                    "type": "number"
+                                                },
+                                                "reference": {
+                                                    "type": "string"
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Checkout completed"
+                    },
+                    "422": {
+                        "description": "Validation error"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/v1/pos/transactions/summary": {
+            "get": {
+                "tags": [
+                    "POS"
+                ],
+                "summary": "POS sales summary",
+                "operationId": "fd7a30b06167a32d20864b43c8ba4263",
+                "parameters": [
+                    {
+                        "name": "terminal_id",
+                        "in": "query",
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "start_date",
+                        "in": "query",
+                        "schema": {
+                            "type": "string",
+                            "format": "date"
+                        }
+                    },
+                    {
+                        "name": "end_date",
+                        "in": "query",
+                        "schema": {
+                            "type": "string",
+                            "format": "date"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Summary metrics"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/v1/pos/transactions/{id}/void": {
+            "post": {
+                "tags": [
+                    "POS"
+                ],
+                "summary": "Void a completed transaction",
+                "operationId": "ea0611669997a146c9c0122aa7efae9d",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "reason"
+                                ],
+                                "properties": {
+                                    "reason": {
+                                        "type": "string"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Voided"
+                    },
+                    "422": {
+                        "description": "Cannot void"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/v1/pos/transactions/{id}/refund": {
+            "post": {
+                "tags": [
+                    "POS"
+                ],
+                "summary": "Refund a completed transaction",
+                "operationId": "21086a5e680fe9c55f83257b1dcd36ad",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "amount",
+                                    "method",
+                                    "reason"
+                                ],
+                                "properties": {
+                                    "amount": {
+                                        "type": "number"
+                                    },
+                                    "method": {
+                                        "type": "string",
+                                        "enum": [
+                                            "cash",
+                                            "card",
+                                            "bank_transfer",
+                                            "digital_wallet",
+                                            "other"
+                                        ]
+                                    },
+                                    "reason": {
+                                        "type": "string"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Refunded"
+                    },
+                    "422": {
+                        "description": "Cannot refund"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/v1/fleet/vehicles": {
+            "get": {
+                "tags": [
+                    "Fleet"
+                ],
+                "summary": "List fleet vehicles",
+                "operationId": "eeb1f177c1fba7cba7e2b9479a1468df",
+                "parameters": [
+                    {
+                        "name": "status",
+                        "in": "query",
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "active",
+                                "inactive",
+                                "maintenance",
+                                "retired"
+                            ]
+                        }
+                    },
+                    {
+                        "name": "type",
+                        "in": "query",
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "car",
+                                "truck",
+                                "van",
+                                "motorcycle",
+                                "bus",
+                                "trailer",
+                                "other"
+                            ]
+                        }
+                    },
+                    {
+                        "name": "search",
+                        "in": "query",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "per_page",
+                        "in": "query",
+                        "schema": {
+                            "type": "integer",
+                            "default": 15
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Paginated vehicle list"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Fleet"
+                ],
+                "summary": "Register a vehicle",
+                "operationId": "6c996f4d21dae152111085bd31f8523c",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "vehicle_code",
+                                    "make",
+                                    "model",
+                                    "year",
+                                    "license_plate"
+                                ],
+                                "properties": {
+                                    "vehicle_code": {
+                                        "type": "string"
+                                    },
+                                    "make": {
+                                        "type": "string"
+                                    },
+                                    "model": {
+                                        "type": "string"
+                                    },
+                                    "year": {
+                                        "type": "integer"
+                                    },
+                                    "license_plate": {
+                                        "type": "string"
+                                    },
+                                    "vin": {
+                                        "type": "string"
+                                    },
+                                    "type": {
+                                        "type": "string",
+                                        "enum": [
+                                            "car",
+                                            "truck",
+                                            "van",
+                                            "motorcycle",
+                                            "bus",
+                                            "trailer",
+                                            "other"
+                                        ]
+                                    },
+                                    "fuel_type": {
+                                        "type": "string",
+                                        "enum": [
+                                            "gasoline",
+                                            "diesel",
+                                            "electric",
+                                            "hybrid",
+                                            "other"
+                                        ]
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Created"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/v1/fleet/vehicles/{id}": {
+            "get": {
+                "tags": [
+                    "Fleet"
+                ],
+                "summary": "Get vehicle with history",
+                "operationId": "05f5169a7157d783cbc7cc2c278829bd",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Vehicle"
+                    },
+                    "404": {
+                        "description": "Not found"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/v1/fleet/drivers": {
+            "get": {
+                "tags": [
+                    "Fleet"
+                ],
+                "summary": "List registered drivers",
+                "operationId": "e5c49d83955274d3f606c00713a9b60f",
+                "parameters": [
+                    {
+                        "name": "status",
+                        "in": "query",
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "active",
+                                "inactive",
+                                "suspended"
+                            ]
+                        }
+                    },
+                    {
+                        "name": "expiring_soon",
+                        "in": "query",
+                        "schema": {
+                            "description": "Days until license expiry",
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Paginated driver list"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Fleet"
+                ],
+                "summary": "Register a driver",
+                "operationId": "86fa7185e8e3611d67bd9528145b8fd0",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "employee_id",
+                                    "license_number",
+                                    "license_expiry"
+                                ],
+                                "properties": {
+                                    "employee_id": {
+                                        "type": "integer"
+                                    },
+                                    "license_number": {
+                                        "type": "string"
+                                    },
+                                    "license_class": {
+                                        "type": "string"
+                                    },
+                                    "license_expiry": {
+                                        "type": "string",
+                                        "format": "date"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Created"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/v1/fleet/trips": {
+            "get": {
+                "tags": [
+                    "Fleet"
+                ],
+                "summary": "List trips",
+                "operationId": "b2c4adfe773587d2707a8b9b100c8164",
+                "parameters": [
+                    {
+                        "name": "vehicle_id",
+                        "in": "query",
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "driver_id",
+                        "in": "query",
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "status",
+                        "in": "query",
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "scheduled",
+                                "in_progress",
+                                "completed",
+                                "cancelled"
+                            ]
+                        }
+                    },
+                    {
+                        "name": "start_date",
+                        "in": "query",
+                        "schema": {
+                            "type": "string",
+                            "format": "date"
+                        }
+                    },
+                    {
+                        "name": "end_date",
+                        "in": "query",
+                        "schema": {
+                            "type": "string",
+                            "format": "date"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Paginated trip list"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Fleet"
+                ],
+                "summary": "Create a trip",
+                "operationId": "86a7e7b0890f9eeaed7df362fc8cf4db",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "vehicle_id",
+                                    "driver_id",
+                                    "start_location",
+                                    "start_odometer",
+                                    "start_time"
+                                ],
+                                "properties": {
+                                    "vehicle_id": {
+                                        "type": "integer"
+                                    },
+                                    "driver_id": {
+                                        "type": "integer"
+                                    },
+                                    "start_location": {
+                                        "type": "string"
+                                    },
+                                    "start_odometer": {
+                                        "type": "number"
+                                    },
+                                    "start_time": {
+                                        "type": "string",
+                                        "format": "date-time"
+                                    },
+                                    "purpose": {
+                                        "type": "string"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Created"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/v1/fleet/trips/{id}/start": {
+            "post": {
+                "tags": [
+                    "Fleet"
+                ],
+                "summary": "Start a scheduled trip",
+                "operationId": "e90c0a3017edf9c2a0edd3da8ede4fb1",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Started"
+                    },
+                    "422": {
+                        "description": "Cannot start"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/v1/fleet/trips/{id}/complete": {
+            "post": {
+                "tags": [
+                    "Fleet"
+                ],
+                "summary": "Complete an in-progress trip",
+                "operationId": "4f90601e42a9ce347b7458c83594eed4",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "end_location",
+                                    "end_odometer"
+                                ],
+                                "properties": {
+                                    "end_location": {
+                                        "type": "string"
+                                    },
+                                    "end_odometer": {
+                                        "type": "number"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Completed"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/v1/fleet/fuel-logs": {
+            "get": {
+                "tags": [
+                    "Fleet"
+                ],
+                "summary": "List fuel logs",
+                "operationId": "cafdf96390c7f06fa384747dfe21e499",
+                "parameters": [
+                    {
+                        "name": "vehicle_id",
+                        "in": "query",
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "fuel_type",
+                        "in": "query",
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "gasoline",
+                                "diesel",
+                                "electric",
+                                "hybrid",
+                                "other"
+                            ]
+                        }
+                    },
+                    {
+                        "name": "start_date",
+                        "in": "query",
+                        "schema": {
+                            "type": "string",
+                            "format": "date"
+                        }
+                    },
+                    {
+                        "name": "end_date",
+                        "in": "query",
+                        "schema": {
+                            "type": "string",
+                            "format": "date"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Paginated fuel log list"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Fleet"
+                ],
+                "summary": "Record a fuel purchase",
+                "operationId": "4fee0b0b4df582f46ac165d5df5b24a9",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "vehicle_id",
+                                    "date",
+                                    "quantity",
+                                    "unit_cost",
+                                    "fuel_type",
+                                    "odometer"
+                                ],
+                                "properties": {
+                                    "vehicle_id": {
+                                        "type": "integer"
+                                    },
+                                    "date": {
+                                        "type": "string",
+                                        "format": "date"
+                                    },
+                                    "quantity": {
+                                        "type": "number"
+                                    },
+                                    "unit_cost": {
+                                        "type": "number"
+                                    },
+                                    "fuel_type": {
+                                        "type": "string",
+                                        "enum": [
+                                            "gasoline",
+                                            "diesel",
+                                            "electric",
+                                            "hybrid",
+                                            "other"
+                                        ]
+                                    },
+                                    "odometer": {
+                                        "type": "number"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Recorded"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/v1/fleet/fuel-tracking/dashboard": {
+            "get": {
+                "tags": [
+                    "Fleet"
+                ],
+                "summary": "Fuel tracking dashboard with summary, trends, and top stations",
+                "operationId": "b53f743db2b81aa57072ef19b0e133e9",
+                "parameters": [
+                    {
+                        "name": "start_date",
+                        "in": "query",
+                        "schema": {
+                            "type": "string",
+                            "format": "date"
+                        }
+                    },
+                    {
+                        "name": "end_date",
+                        "in": "query",
+                        "schema": {
+                            "type": "string",
+                            "format": "date"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Dashboard data"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/v1/fleet/fuel-tracking/efficiency": {
+            "get": {
+                "tags": [
+                    "Fleet"
+                ],
+                "summary": "Fuel efficiency metrics for a specific vehicle",
+                "operationId": "f97661d4504c55e02b42d38888e40acf",
+                "parameters": [
+                    {
+                        "name": "vehicle_id",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Efficiency records with km/L and cost/km"
+                    },
+                    "422": {
+                        "description": "Missing vehicle_id"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/v1/fleet/fuel-tracking/consumption": {
+            "get": {
+                "tags": [
+                    "Fleet"
+                ],
+                "summary": "Fuel consumption breakdown by vehicle",
+                "operationId": "8eb4390b45570eefbe1d40e4b8c7b8a1",
+                "parameters": [
+                    {
+                        "name": "start_date",
+                        "in": "query",
+                        "schema": {
+                            "type": "string",
+                            "format": "date"
+                        }
+                    },
+                    {
+                        "name": "end_date",
+                        "in": "query",
+                        "schema": {
+                            "type": "string",
+                            "format": "date"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Consumption per vehicle"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/v1/fleet/fuel-tracking/price-history": {
+            "get": {
+                "tags": [
+                    "Fleet"
+                ],
+                "summary": "Fuel price history over time",
+                "operationId": "54ec697a11600f893dad3544be13650d",
+                "parameters": [
+                    {
+                        "name": "fuel_type",
+                        "in": "query",
+                        "schema": {
+                            "type": "string",
+                            "default": "gasoline",
+                            "enum": [
+                                "gasoline",
+                                "diesel",
+                                "electric",
+                                "hybrid",
+                                "other"
+                            ]
+                        }
+                    },
+                    {
+                        "name": "start_date",
+                        "in": "query",
+                        "schema": {
+                            "type": "string",
+                            "format": "date"
+                        }
+                    },
+                    {
+                        "name": "end_date",
+                        "in": "query",
+                        "schema": {
+                            "type": "string",
+                            "format": "date"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Daily price trend with min/max/avg"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/v1/fleet/maintenance": {
+            "get": {
+                "tags": [
+                    "Fleet"
+                ],
+                "summary": "List maintenance records",
+                "operationId": "cf6b96749d76b50a34e0fed7bd0fc41b",
+                "parameters": [
+                    {
+                        "name": "vehicle_id",
+                        "in": "query",
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "status",
+                        "in": "query",
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "scheduled",
+                                "in_progress",
+                                "completed",
+                                "cancelled"
+                            ]
+                        }
+                    },
+                    {
+                        "name": "type",
+                        "in": "query",
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "preventive",
+                                "corrective",
+                                "emergency",
+                                "inspection"
+                            ]
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Paginated maintenance list"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Fleet"
+                ],
+                "summary": "Schedule maintenance",
+                "operationId": "748faa56e7432ef2645669cbd7f25a1a",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "vehicle_id",
+                                    "type",
+                                    "title"
+                                ],
+                                "properties": {
+                                    "vehicle_id": {
+                                        "type": "integer"
+                                    },
+                                    "type": {
+                                        "type": "string",
+                                        "enum": [
+                                            "preventive",
+                                            "corrective",
+                                            "emergency",
+                                            "inspection"
+                                        ]
+                                    },
+                                    "title": {
+                                        "type": "string"
+                                    },
+                                    "scheduled_date": {
+                                        "type": "string",
+                                        "format": "date"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Scheduled"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/v1/fleet/maintenance-tracking/dashboard": {
+            "get": {
+                "tags": [
+                    "Fleet"
+                ],
+                "summary": "Maintenance dashboard with overdue, upcoming, and cost summary",
+                "operationId": "1298c11ee87ee83c592f1945f1f9fe5c",
+                "responses": {
+                    "200": {
+                        "description": "Dashboard data"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/v1/fleet/maintenance-tracking/history": {
+            "get": {
+                "tags": [
+                    "Fleet"
+                ],
+                "summary": "Full maintenance history for a vehicle",
+                "operationId": "206ca72595f4935a73983c224ffabb52",
+                "parameters": [
+                    {
+                        "name": "vehicle_id",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Vehicle maintenance history with cost and interval stats"
+                    },
+                    "422": {
+                        "description": "Missing vehicle_id"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/v1/fleet/maintenance-tracking/overdue": {
+            "get": {
+                "tags": [
+                    "Fleet"
+                ],
+                "summary": "List overdue maintenance records",
+                "operationId": "57600be7571b8e7e67905eb10c307ecd",
+                "responses": {
+                    "200": {
+                        "description": "Overdue maintenance records"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/v1/fleet/maintenance-tracking/cost-report": {
+            "get": {
+                "tags": [
+                    "Fleet"
+                ],
+                "summary": "Maintenance cost report with breakdowns",
+                "operationId": "4cceb2a411eafecf526960a9ade9a616",
+                "parameters": [
+                    {
+                        "name": "start_date",
+                        "in": "query",
+                        "schema": {
+                            "type": "string",
+                            "format": "date"
+                        }
+                    },
+                    {
+                        "name": "end_date",
+                        "in": "query",
+                        "schema": {
+                            "type": "string",
+                            "format": "date"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Cost report with breakdowns by type, vehicle, provider, and month"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/v1/fleet/parts": {
+            "get": {
+                "tags": [
+                    "Fleet"
+                ],
+                "summary": "List fleet parts inventory",
+                "operationId": "a4d7d05137081e5eb3f1bde4d1824684",
+                "parameters": [
+                    {
+                        "name": "category_id",
+                        "in": "query",
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "search",
+                        "in": "query",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "low_stock",
+                        "in": "query",
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "true",
+                                "false"
+                            ]
+                        }
+                    },
+                    {
+                        "name": "per_page",
+                        "in": "query",
+                        "schema": {
+                            "type": "integer",
+                            "default": 15
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Paginated parts list"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Fleet"
+                ],
+                "summary": "Add a part to inventory",
+                "operationId": "564d764a53c142cec52992f3ebf16248",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "part_number",
+                                    "name",
+                                    "unit_cost"
+                                ],
+                                "properties": {
+                                    "part_number": {
+                                        "type": "string"
+                                    },
+                                    "name": {
+                                        "type": "string"
+                                    },
+                                    "category_id": {
+                                        "type": "integer"
+                                    },
+                                    "unit_cost": {
+                                        "type": "number"
+                                    },
+                                    "quantity_on_hand": {
+                                        "type": "number",
+                                        "default": 0
+                                    },
+                                    "reorder_level": {
+                                        "type": "number",
+                                        "default": 0
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Created"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/v1/fleet/parts/low-stock": {
+            "get": {
+                "tags": [
+                    "Fleet"
+                ],
+                "summary": "List parts below reorder level",
+                "operationId": "be9f7683501298b5ec1275bf66fbc1ad",
+                "responses": {
+                    "200": {
+                        "description": "Low stock parts"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/v1/fleet/parts/{id}/adjust-stock": {
+            "post": {
+                "tags": [
+                    "Fleet"
+                ],
+                "summary": "Adjust part stock level",
+                "operationId": "305b59e381219f8079824c187e73213c",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "adjustment",
+                                    "reason"
+                                ],
+                                "properties": {
+                                    "adjustment": {
+                                        "description": "Positive to add, negative to subtract",
+                                        "type": "number"
+                                    },
+                                    "reason": {
+                                        "type": "string"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Adjusted"
+                    },
+                    "422": {
+                        "description": "Would result in negative stock"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/v1/fleet/parts/usage": {
+            "get": {
+                "tags": [
+                    "Fleet"
+                ],
+                "summary": "List part usage records",
+                "operationId": "3ed52a197233a12233764822692dc60c",
+                "parameters": [
+                    {
+                        "name": "part_id",
+                        "in": "query",
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "vehicle_id",
+                        "in": "query",
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "start_date",
+                        "in": "query",
+                        "schema": {
+                            "type": "string",
+                            "format": "date"
+                        }
+                    },
+                    {
+                        "name": "end_date",
+                        "in": "query",
+                        "schema": {
+                            "type": "string",
+                            "format": "date"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Paginated usage list"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Fleet"
+                ],
+                "summary": "Record part usage against a vehicle",
+                "operationId": "96f5e3a2e885b2cac1968f0ce7f1d0ef",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "part_id",
+                                    "vehicle_id",
+                                    "quantity",
+                                    "used_date"
+                                ],
+                                "properties": {
+                                    "part_id": {
+                                        "type": "integer"
+                                    },
+                                    "vehicle_id": {
+                                        "type": "integer"
+                                    },
+                                    "maintenance_id": {
+                                        "type": "integer"
+                                    },
+                                    "quantity": {
+                                        "type": "number"
+                                    },
+                                    "unit_cost": {
+                                        "type": "number"
+                                    },
+                                    "used_date": {
+                                        "type": "string",
+                                        "format": "date"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Recorded"
+                    },
+                    "422": {
+                        "description": "Insufficient stock"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/v1/fleet/parts/usage/summary": {
+            "get": {
+                "tags": [
+                    "Fleet"
+                ],
+                "summary": "Part usage cost summary",
+                "operationId": "ba86452fb09f74acd139dd1973f59cfd",
+                "parameters": [
+                    {
+                        "name": "start_date",
+                        "in": "query",
+                        "schema": {
+                            "type": "string",
+                            "format": "date"
+                        }
+                    },
+                    {
+                        "name": "end_date",
+                        "in": "query",
+                        "schema": {
+                            "type": "string",
+                            "format": "date"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Usage summary with top parts and cost by vehicle"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/v1/subscription/plans": {
+            "get": {
+                "tags": [
+                    "Subscription"
+                ],
+                "summary": "List all subscription plans",
+                "operationId": "33e30f67cdc5d9568bdbaec463a4a2f6",
+                "responses": {
+                    "200": {
+                        "description": "Plan list"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Subscription"
+                ],
+                "summary": "Create a plan",
+                "operationId": "d9b3c67d05beaba232eb2e9d2fc799df",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "code",
+                                    "name",
+                                    "price",
+                                    "billing_interval"
+                                ],
+                                "properties": {
+                                    "code": {
+                                        "type": "string"
+                                    },
+                                    "name": {
+                                        "type": "string"
+                                    },
+                                    "price": {
+                                        "type": "number"
+                                    },
+                                    "billing_interval": {
+                                        "type": "string",
+                                        "enum": [
+                                            "monthly",
+                                            "quarterly",
+                                            "annually"
+                                        ]
+                                    },
+                                    "trial_days": {
+                                        "type": "integer"
+                                    },
+                                    "max_users": {
+                                        "type": "integer"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Created"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/v1/subscription/subscriptions": {
+            "get": {
+                "tags": [
+                    "Subscription"
+                ],
+                "summary": "List subscriptions",
+                "operationId": "e5a97d810c928f7d9f97164be8f801eb",
+                "parameters": [
+                    {
+                        "name": "status",
+                        "in": "query",
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "trialing",
+                                "active",
+                                "past_due",
+                                "cancelled",
+                                "suspended"
+                            ]
+                        }
+                    },
+                    {
+                        "name": "customer_id",
+                        "in": "query",
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Paginated list"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Subscription"
+                ],
+                "summary": "Create a subscription",
+                "operationId": "b8f6e39121fe058a3bb2583f66cb3d62",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "customer_id",
+                                    "plan_id"
+                                ],
+                                "properties": {
+                                    "customer_id": {
+                                        "type": "integer"
+                                    },
+                                    "plan_id": {
+                                        "type": "integer"
+                                    },
+                                    "quantity": {
+                                        "type": "integer",
+                                        "default": 1
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Created"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/v1/subscription/subscriptions/{id}/change-plan": {
+            "post": {
+                "tags": [
+                    "Subscription"
+                ],
+                "summary": "Upgrade or downgrade plan",
+                "operationId": "8088e5ccd4b653fb92db6c115f043c7e",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "plan_id",
+                                    "reason"
+                                ],
+                                "properties": {
+                                    "plan_id": {
+                                        "type": "integer"
+                                    },
+                                    "reason": {
+                                        "type": "string"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Plan changed"
+                    },
+                    "422": {
+                        "description": "Cannot change"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/v1/subscription/subscriptions/{id}/cancel": {
+            "post": {
+                "tags": [
+                    "Subscription"
+                ],
+                "summary": "Cancel subscription",
+                "operationId": "d27d492e318ca271fccfc35a73310e15",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "reason"
+                                ],
+                                "properties": {
+                                    "reason": {
+                                        "type": "string"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Cancelled"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/v1/subscription/subscriptions/dashboard": {
+            "get": {
+                "tags": [
+                    "Subscription"
+                ],
+                "summary": "Subscription dashboard metrics",
+                "operationId": "c77b1351b6aede25fb9b16a3671746f5",
+                "responses": {
+                    "200": {
+                        "description": "MRR, churn, plan distribution"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/v1/subscription/subscriptions/{id}/usage": {
+            "get": {
+                "tags": [
+                    "Subscription"
+                ],
+                "summary": "Usage records for a subscription",
+                "operationId": "0bf07771af7900d18357092894255c74",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Usage records"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/v1/subscription/usage": {
+            "post": {
+                "tags": [
+                    "Subscription"
+                ],
+                "summary": "Record usage for a subscription",
+                "operationId": "7dc8c848ffce73649c5a87d6708301f0",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "subscription_id",
+                                    "usage_type",
+                                    "quantity"
+                                ],
+                                "properties": {
+                                    "subscription_id": {
+                                        "type": "integer"
+                                    },
+                                    "usage_type": {
+                                        "type": "string"
+                                    },
+                                    "quantity": {
+                                        "type": "number"
+                                    },
+                                    "unit_price": {
+                                        "type": "number"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Recorded"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/v1/subscription/usage/batch": {
+            "post": {
+                "tags": [
+                    "Subscription"
+                ],
+                "summary": "Batch record usage",
+                "operationId": "171fa7427e75288f85e61020713dd82e",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "records"
+                                ],
+                                "properties": {
+                                    "records": {
+                                        "type": "array",
+                                        "items": {
+                                            "type": "object"
+                                        }
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Batch recorded"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
         }
     },
     "components": {
@@ -3495,6 +7168,38 @@
         {
             "name": "LMS",
             "description": "Courses and enrollments"
+        },
+        {
+            "name": "Reports",
+            "description": "Async report generation, scheduling, and download"
+        },
+        {
+            "name": "Agents",
+            "description": "AI agent profiles, skill assignments, executions, and schedules"
+        },
+        {
+            "name": "Marketing",
+            "description": "Campaigns, leads, analytics, ROI"
+        },
+        {
+            "name": "Network",
+            "description": "User profiles, discovery, follows, connections, feed"
+        },
+        {
+            "name": "POS",
+            "description": "Point of Sale — terminals, transactions, payments, checkout"
+        },
+        {
+            "name": "Fleet",
+            "description": "Fleet management — vehicles, drivers, trips, fuel logs, maintenance"
+        },
+        {
+            "name": "Subscription",
+            "description": "SaaS subscriptions — plans, billing, usage metering, upgrades/downgrades"
+        },
+        {
+            "name": "Webhooks",
+            "description": "Manage outbound webhooks with event filtering and delivery history"
         }
     ]
 }

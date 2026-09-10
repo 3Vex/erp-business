@@ -1,7 +1,7 @@
 const CACHE_VERSION = 'v2';
-const STATIC_CACHE = `tpt-erp-static-${CACHE_VERSION}`;
-const DYNAMIC_CACHE = `tpt-erp-dynamic-${CACHE_VERSION}`;
-const API_CACHE = `tpt-erp-api-${CACHE_VERSION}`;
+const STATIC_CACHE = `erp-static-${CACHE_VERSION}`;
+const DYNAMIC_CACHE = `erp-dynamic-${CACHE_VERSION}`;
+const API_CACHE = `erp-api-${CACHE_VERSION}`;
 const OFFLINE_PAGE = '/offline.html';
 
 const EXCLUDE_FROM_CACHE = [

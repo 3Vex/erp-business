@@ -1,5 +1,5 @@
 /**
- * TPT Free ERP - Procurement Component (Refactored)
+ * ERP System - Procurement Component (Refactored)
  * Complete vendor management, purchase orders, and supplier evaluation interface
  * Uses shared utilities for reduced complexity and improved maintainability
  */

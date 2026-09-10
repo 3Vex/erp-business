@@ -1,5 +1,5 @@
 /**
- * TPT Free ERP - Utility Functions
+ * ERP System - Utility Functions
  * Common utility functions used throughout the application
  */
 

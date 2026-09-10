@@ -1,5 +1,5 @@
 /**
- * TPT Free ERP - Advanced Analytics & Business Intelligence Component (Refactored)
+ * ERP System - Advanced Analytics & Business Intelligence Component (Refactored)
  * Complete data visualization, predictive modeling, and business intelligence interface
  * Uses shared utilities for reduced complexity and improved maintainability
  */

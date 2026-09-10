@@ -1,5 +1,5 @@
 /**
- * TPT Free ERP - Data Formatter Utility
+ * ERP System - Data Formatter Utility
  * Comprehensive data formatting for dates, numbers, currencies, and text transformations
  */
 

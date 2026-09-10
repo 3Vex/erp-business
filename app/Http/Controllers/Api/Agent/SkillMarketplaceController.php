@@ -144,7 +144,7 @@ class SkillMarketplaceController extends BaseApiController
             'http' => [
                 'timeout' => 30,
                 'method' => 'GET',
-                'header' => "User-Agent: TPT-Free-ERP-SkillMarketplace\r\n",
+                'header' => "User-Agent: ERP-SkillMarketplace\r\n",
                 'ignore_errors' => true,
             ],
         ]);

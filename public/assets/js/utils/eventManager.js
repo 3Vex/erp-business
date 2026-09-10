@@ -1,5 +1,5 @@
 /**
- * TPT Free ERP - Event Manager Utility
+ * ERP System - Event Manager Utility
  * Comprehensive event system for component communication and state management
  */
 

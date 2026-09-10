@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Api\Agent;
 
 use App\Http\Controllers\Api\BaseApiController;
-use App\Models\Agent\Agenofile;
+use App\Models\Agent\AgentProfile;
 use App\Services\Agent\SkillRegistry;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -17,7 +17,7 @@ class AgentController extends BaseApiController
 
     public function index(Request $request): JsonResponse
     {
-        $agents = Agenofile::withCount(['executions', 'skillAssignments'])
+        $agents = AgentProfile::withCount(['executions', 'skillAssignments'])
             ->when($request->query('type'), fn ($q, $type) => $q->where('agent_type', $type))
             ->when($request->query('active'), fn ($q, $active) => $q->where('is_active', filter_var($active, FILTER_VALIDATE_BOOLEAN)))
             ->orderByDesc('created_at')
@@ -43,7 +43,7 @@ class AgentController extends BaseApiController
             return $error;
         }
 
-        $agent = Agenofile::create([
+        $agent = AgentProfile::create([
             'name' => $request->name,
             'description' => $request->description,
             'agent_type' => $request->agent_type,
@@ -57,7 +57,7 @@ class AgentController extends BaseApiController
 
     public function show(int $id): JsonResponse
     {
-        $agent = Agenofile::with(['skillAssignments', 'creator:id,name,email'])
+        $agent = AgentProfile::with(['skillAssignments', 'creator:id,name,email'])
             ->withCount('executions')
             ->find($id);
 
@@ -80,7 +80,7 @@ class AgentController extends BaseApiController
 
     public function update(Request $request, int $id): JsonResponse
     {
-        $agent = Agenofile::find($id);
+        $agent = AgentProfile::find($id);
         if (! $agent) {
             return $this->respondNotFound();
         }
@@ -103,7 +103,7 @@ class AgentController extends BaseApiController
 
     public function destroy(int $id): JsonResponse
     {
-        $agent = Agenofile::find($id);
+        $agent = AgentProfile::find($id);
         if (! $agent) {
             return $this->respondNotFound();
         }

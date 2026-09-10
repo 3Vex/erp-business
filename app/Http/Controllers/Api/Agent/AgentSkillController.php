@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Api\Agent;
 
 use App\Http\Controllers\Api\BaseApiController;
-use App\Models\Agent\Agenofile;
+use App\Models\Agent\AgentProfile;
 use App\Models\Agent\AgentSkillAssignment;
 use App\Services\Agent\AgentExecutionService;
 use App\Services\Agent\SkillRegistry;
@@ -31,7 +31,7 @@ class AgentSkillController extends BaseApiController
     // GET /agents/{id}/skills
     public function listSkills(int $agentId): JsonResponse
     {
-        $agent = Agenofile::find($agentId);
+        $agent = AgentProfile::find($agentId);
         if (! $agent) {
             return $this->respondNotFound();
         }
@@ -51,7 +51,7 @@ class AgentSkillController extends BaseApiController
     // PUT /agents/{id}/skills/{slug}
     public function updateSkill(Request $request, int $agentId, string $slug): JsonResponse
     {
-        $agent = Agenofile::find($agentId);
+        $agent = AgentProfile::find($agentId);
         if (! $agent) {
             return $this->respondNotFound();
         }

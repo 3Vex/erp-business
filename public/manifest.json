@@ -1,6 +1,6 @@
 {
-  "name": "RIS Free ERP",
-  "short_name": "RIS ERP",
+  "name": "ERP Business System",
+  "short_name": "ERP System",
   "description": "Comprehensive Enterprise Resource Planning system with 32+ modules for complete business management",
   "start_url": "/",
   "display": "standalone",
@@ -216,7 +216,7 @@
   },
   "protocol_handlers": [
     {
-      "protocol": "web+tpt-erp",
+      "protocol": "web+erp",
       "url": "/protocol-handler?protocol=%s"
     }
   ],

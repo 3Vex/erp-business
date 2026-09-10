@@ -53,7 +53,7 @@ class InvitationController extends BaseApiController
     /**
      * List all sent invitations (admin only)
      */
-    public function index(): JsonResponse
+    public function index(Request $request): JsonResponse
     {
         $invitations = Invitation::with(['inviter:id,name', 'role:id,display_name'])
             ->orderByDesc('created_at')

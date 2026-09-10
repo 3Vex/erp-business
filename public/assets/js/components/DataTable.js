@@ -1,5 +1,5 @@
 /**
- * TPT Free ERP - DataTable Component
+ * ERP System - DataTable Component
  * Advanced data table with sorting, filtering, pagination, and export capabilities
  */
 

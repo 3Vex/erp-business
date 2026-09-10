@@ -174,8 +174,8 @@ class WebhookDeliveryJobTest extends TestCase
 
         WebhookDeliveryJob::dispatchSync($delivery->id);
 
-        $this->assertArrayHasKey('x-tpt-signature', array_change_key_case($capturedHeaders, CASE_LOWER));
-        $this->assertStringStartsWith('sha256=', array_change_key_case($capturedHeaders, CASE_LOWER)['x-tpt-signature'][0]);
+        $this->assertArrayHasKey('x-erp-signature', array_change_key_case($capturedHeaders, CASE_LOWER));
+        $this->assertStringStartsWith('sha256=', array_change_key_case($capturedHeaders, CASE_LOWER)['x-erp-signature'][0]);
     }
 
     public function test_delivery_for_nonexistent_id_does_not_throw(): void

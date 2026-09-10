@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Api\Agent;
 
 use App\Http\Controllers\Api\BaseApiController;
 use App\Models\Agent\AgentCompanyAccess;
-use App\Models\Agent\Agenofile;
+use App\Models\Agent\AgentProfile;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
@@ -15,7 +15,7 @@ class AgentCompanyAccessController extends BaseApiController
         $user = $request->user();
         $companyId = $user->company_id ?? null;
 
-        $access = AgentCompanyAccess::with('agenofile')
+        $access = AgentCompanyAccess::with('AgentProfile')
             ->where('company_id', $companyId)
             ->where(function ($q) {
                 $q->whereNull('expires_at')->orWhere('expires_at', '>', now());
@@ -37,7 +37,7 @@ class AgentCompanyAccessController extends BaseApiController
 
     public function grant(Request $request, int $id): JsonResponse
     {
-        $agent = Agenofile::find($id);
+        $agent = AgentProfile::find($id);
         if (! $agent) {
             return $this->respondNotFound();
         }

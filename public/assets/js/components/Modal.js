@@ -1,5 +1,5 @@
 /**
- * TPT Free ERP - Modal Component
+ * ERP System - Modal Component
  * Advanced modal and dialog system with various types and configurations
  */
 

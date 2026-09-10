@@ -1,5 +1,5 @@
 /**
- * TPT Free ERP - Component Architecture
+ * ERP System - Component Architecture
  * Reusable UI components system
  */
 

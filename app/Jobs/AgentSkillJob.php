@@ -4,7 +4,7 @@ namespace App\Jobs;
 
 use App\Models\Agent\AgentCostRecord;
 use App\Models\Agent\AgentExecution;
-use App\Models\Agent\Agenofile;
+use App\Models\Agent\AgentProfile;
 use App\Models\Agent\AgentToken;
 use App\Services\Agent\LocalModelService;
 use App\Services\Agent\OpenRouterService;
@@ -27,7 +27,7 @@ class AgentSkillJob implements ShouldQueue
     public int $timeout = 180;
 
     public function __construct(
-        private readonly int $agenofileId,
+        private readonly int $AgentProfileId,
         private readonly string $skillSlug,
         private readonly array $input,
         private readonly ?int $triggeredBy,
@@ -46,7 +46,7 @@ class AgentSkillJob implements ShouldQueue
         $execution = $this->executionId
             ? AgentExecution::find($this->executionId)
             : AgentExecution::create([
-                'agent_profile_id' => $this->agenofileId,
+                'agent_profile_id' => $this->AgentProfileId,
                 'skill_slug' => $this->skillSlug,
                 'triggered_by' => $this->triggeredBy,
                 'trigger_type' => $this->triggerType,
@@ -77,7 +77,7 @@ class AgentSkillJob implements ShouldQueue
         }
 
         try {
-            $agent = Agenofile::findOrFail($this->agenofileId);
+            $agent = AgentProfile::findOrFail($this->AgentProfileId);
             $skill = $registry->find($this->skillSlug);
 
             if (! $skill) {
@@ -116,7 +116,7 @@ class AgentSkillJob implements ShouldQueue
             try {
                 app(WebhookService::class)->dispatch('agent.execution.completed', [
                     'execution_id' => $execution->id,
-                    'agent_profile_id' => $this->agenofileId,
+                    'agent_profile_id' => $this->AgentProfileId,
                     'skill_slug' => $this->skillSlug,
                     'status' => 'completed',
                     'tokens_used' => $result['tokens_used'] ?? null,
@@ -139,7 +139,7 @@ class AgentSkillJob implements ShouldQueue
             $estimatedCost = $tokensUsed * $costPerToken;
 
             AgentCostRecord::create([
-                'agent_profile_id' => $this->agenofileId,
+                'agent_profile_id' => $this->AgentProfileId,
                 'skill_slug' => $this->skillSlug,
                 'model_used' => $modelUsed,
                 'tokens_input' => (int) ($tokensUsed * 0.6),

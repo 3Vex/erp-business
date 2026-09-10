@@ -14,13 +14,13 @@ class RunAgentSchedules extends Command
 
     public function handle(): void
     {
-        $due = AgentSchedule::with('agenofile')
+        $due = AgentSchedule::with('AgentProfile')
             ->where('is_active', true)
             ->where('next_run_at', '<=', now())
             ->get();
 
         foreach ($due as $schedule) {
-            if (! $schedule->agenofile || ! $schedule->agenofile->is_active) {
+            if (! $schedule->AgentProfile || ! $schedule->AgentProfile->is_active) {
                 continue;
             }
 

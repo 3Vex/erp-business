@@ -1,5 +1,5 @@
 /**
- * TPT Free ERP - Project Management Component (Refactored)
+ * ERP System - Project Management Component (Refactored)
  * Complete project planning, task management, and resource allocation interface
  * Uses shared utilities for reduced complexity and improved maintainability
  */

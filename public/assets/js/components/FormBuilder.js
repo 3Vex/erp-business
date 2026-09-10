@@ -1,5 +1,5 @@
 /**
- * TPT Free ERP - Form Builder Component
+ * ERP System - Form Builder Component
  * Interactive form builder with drag-and-drop functionality
  */
 

@@ -53,7 +53,7 @@ class AgentCostController extends BaseApiController
 
         $query = $this->applyDateRange($query, $request);
 
-        $results = $query->with('agenofile:id,name')->get();
+        $results = $query->with('AgentProfile:id,name')->get();
 
         return $this->respondSuccess('Cost by agent', $results);
     }

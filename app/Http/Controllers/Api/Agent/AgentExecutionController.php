@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Api\Agent;
 
 use App\Http\Controllers\Api\BaseApiController;
 use App\Models\Agent\AgentExecution;
-use App\Models\Agent\Agenofile;
+use App\Models\Agent\AgentProfile;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
@@ -18,7 +18,7 @@ class AgentExecutionController extends BaseApiController
     // GET /agents/{id}/executions
     public function listExecutions(Request $request, int $agentId): JsonResponse
     {
-        $agent = Agenofile::find($agentId);
+        $agent = AgentProfile::find($agentId);
         if (! $agent) {
             return $this->respondNotFound();
         }
@@ -54,7 +54,7 @@ class AgentExecutionController extends BaseApiController
     public function exportCsv(Request $request)
     {
         $query = AgentExecution::query()
-            ->with('agenofile:name')
+            ->with('AgentProfile:name')
             ->when($request->query('agent_profile_id'), fn ($q, $id) => $q->where('agent_profile_id', $id))
             ->when($request->query('status'), fn ($q, $s) => $q->where('status', $s))
             ->when($request->query('from'), fn ($q, $d) => $q->where('created_at', '>=', $d))
@@ -78,7 +78,7 @@ class AgentExecutionController extends BaseApiController
                 foreach ($executions as $e) {
                     fputcsv($handle, [
                         $e->id,
-                        $e->agenofile->name ?? 'N/A',
+                        $e->AgentProfile->name ?? 'N/A',
                         $e->skill_slug,
                         $e->status,
                         $e->trigger_type,

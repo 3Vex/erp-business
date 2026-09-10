@@ -28,7 +28,7 @@ return Application::configure(basePath: dirname(__DIR__))
     ->withMiddleware(function (Middleware $middleware): void {
         // Register middleware aliases used by routes
         $middleware->alias([
-            'cors.tpt' => Cors::class,
+            'cors.erp' => Cors::class,
             'role' => RoleMiddleware::class,
             'permission' => PermissionMiddleware::class,
             'csrf.protect' => CsrfProtection::class,

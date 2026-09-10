@@ -1,5 +1,5 @@
 /**
- * TPT Free ERP - Form Component
+ * ERP System - Form Component
  * Advanced form component with validation, dynamic fields, and submission handling
  */
 

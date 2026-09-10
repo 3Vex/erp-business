@@ -27,9 +27,9 @@ class AgentTeamStepResult extends Model
         return $this->belongsTo(AgentTeamExecution::class, 'team_execution_id');
     }
 
-    public function agenofile(): BelongsTo
+    public function AgentProfile(): BelongsTo
     {
-        return $this->belongsTo(Agenofile::class);
+        return $this->belongsTo(AgentProfile::class);
     }
 
     public function execution(): BelongsTo

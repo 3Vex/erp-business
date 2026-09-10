@@ -1,5 +1,5 @@
 /**
- * TPT Free ERP - Accessibility Manager Utility
+ * ERP System - Accessibility Manager Utility
  * ARIA labels, keyboard navigation, screen reader support, and color contrast
  */
 

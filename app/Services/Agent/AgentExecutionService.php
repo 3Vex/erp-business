@@ -4,7 +4,7 @@ namespace App\Services\Agent;
 
 use App\Jobs\AgentSkillJob;
 use App\Models\Agent\AgentExecution;
-use App\Models\Agent\Agenofile;
+use App\Models\Agent\AgentProfile;
 use App\Models\Agent\AgentSkillAssignment;
 use Illuminate\Support\Facades\Log;
 
@@ -15,13 +15,13 @@ class AgentExecutionService
     ) {}
 
     public function execute(
-        int $agenofileId,
+        int $AgentProfileId,
         string $skillSlug,
         array $input,
         ?int $triggeredBy = null,
         string $triggerType = 'manual'
     ): AgentExecution {
-        $agent = Agenofile::findOrFail($agenofileId);
+        $agent = AgentProfile::findOrFail($AgentProfileId);
 
         if (! $agent->is_active) {
             throw new \RuntimeException("Agent profile '{$agent->name}' is not active.");
@@ -33,7 +33,7 @@ class AgentExecutionService
         }
 
         // Check skill is enabled for this agent
-        $assignment = AgentSkillAssignment::where('agent_profile_id', $agenofileId)
+        $assignment = AgentSkillAssignment::where('agent_profile_id', $AgentProfileId)
             ->where('skill_slug', $skillSlug)
             ->first();
 
@@ -42,7 +42,7 @@ class AgentExecutionService
         }
 
         $execution = AgentExecution::create([
-            'agent_profile_id' => $agenofileId,
+            'agent_profile_id' => $AgentProfileId,
             'skill_slug' => $skillSlug,
             'triggered_by' => $triggeredBy,
             'trigger_type' => $triggerType,
@@ -50,9 +50,9 @@ class AgentExecutionService
             'status' => 'queued',
         ]);
 
-        AgentSkillJob::dispatch($agenofileId, $skillSlug, $input, $triggeredBy, $triggerType, $execution->id);
+        AgentSkillJob::dispatch($AgentProfileId, $skillSlug, $input, $triggeredBy, $triggerType, $execution->id);
 
-        Log::info("Agent execution #{$execution->id} queued: agent={$agenofileId} skill={$skillSlug}");
+        Log::info("Agent execution #{$execution->id} queued: agent={$AgentProfileId} skill={$skillSlug}");
 
         return $execution;
     }

@@ -1,5 +1,5 @@
 /**
- * TPT Free ERP - Error Boundary Utility
+ * ERP System - Error Boundary Utility
  * Global error handling, logging, and recovery mechanisms
  */
 

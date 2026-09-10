@@ -1,5 +1,5 @@
 /**
- * TPT Free ERP - Learning Management System Component (Refactored)
+ * ERP System - Learning Management System Component (Refactored)
  * Complete course management, student enrollment, certification, and compliance training interface
  * Uses shared utilities for reduced complexity and improved maintainability
  */

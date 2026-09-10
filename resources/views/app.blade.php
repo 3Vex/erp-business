@@ -7,7 +7,7 @@
         <meta name="apple-mobile-web-app-capable" content="yes">
         <meta name="apple-mobile-web-app-status-bar-style" content="default">
         <meta name="theme-color" content="#2563eb">
-        <meta name="description" content="RIS Free ERP — comprehensive enterprise resource planning system">
+        <meta name="description" content="ERP System — comprehensive enterprise resource planning system">
         <link rel="manifest" href="/manifest.json">
         <link rel="apple-touch-icon" href="/assets/icons/icon-192x192.png">
         @vite(['resources/css/app.css', 'resources/js/main.ts'])

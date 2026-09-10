@@ -1,5 +1,5 @@
 /**
- * TPT Free ERP - Sales & CRM Component (Refactored)
+ * ERP System - Sales & CRM Component (Refactored)
  * Main sales dashboard and CRM management interface
  * Uses shared utilities for reduced complexity and improved maintainability
  */

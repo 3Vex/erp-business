@@ -1,5 +1,5 @@
 /**
- * TPT Free ERP - Main Application
+ * ERP System - Main Application
  * Application initialization and main logic
  */
 
@@ -26,7 +26,7 @@ class App {
         if (this.isInitialized) return;
 
         try {
-            console.log('Initializing TPT Free ERP...');
+            console.log('Initializing ERP System...');
 
             // Setup global error handlers
             this.setupErrorHandlers();
@@ -52,7 +52,7 @@ class App {
             // Mark as initialized
             this.isInitialized = true;
 
-            console.log('TPT Free ERP initialized successfully');
+            console.log('ERP System initialized successfully');
 
             // Hide loading screen
             this.hideLoadingScreen();
@@ -557,7 +557,7 @@ class App {
             mainContent.innerHTML = `
                 <div class="auth-container">
                     <div class="auth-card">
-                        <h2>Login to TPT ERP</h2>
+                        <h2>Login to ERP System</h2>
                         <form id="login-form" class="auth-form">
                             <div class="form-group">
                                 <label for="email">Email</label>
@@ -675,7 +675,7 @@ class App {
             this.showNotification({
                 type: 'info',
                 title: 'Welcome',
-                message: 'Welcome to TPT Free ERP!'
+                message: 'Welcome to ERP System!'
             });
         }, 1000);
     }

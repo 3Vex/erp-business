@@ -1,5 +1,5 @@
 /**
- * TPT Free ERP - Asset Management Component (Refactored)
+ * ERP System - Asset Management Component (Refactored)
  * Complete asset tracking, maintenance, depreciation, and lifecycle management interface
  * Uses shared utilities for reduced complexity and improved maintainability
  */

@@ -22,9 +22,9 @@ class AgentSchedule extends Model
         'next_run_at' => 'datetime',
     ];
 
-    public function agenofile(): BelongsTo
+    public function AgentProfile(): BelongsTo
     {
-        return $this->belongsTo(Agenofile::class);
+        return $this->belongsTo(AgentProfile::class);
     }
 
     public function lastExecution(): BelongsTo

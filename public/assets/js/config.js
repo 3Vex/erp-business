@@ -1,5 +1,5 @@
 /**
- * TPT Free ERP - Configuration
+ * ERP System - Configuration
  * Application configuration settings
  */
 
@@ -33,9 +33,9 @@ const CONFIG = {
 
     // Authentication
     AUTH: {
-        TOKEN_KEY: 'tpt_erp_token',
-        REFRESH_TOKEN_KEY: 'tpt_erp_refresh_token',
-        USER_KEY: 'tpt_erp_user',
+        TOKEN_KEY: 'ERP_erp_token',
+        REFRESH_TOKEN_KEY: 'ERP_erp_refresh_token',
+        USER_KEY: 'ERP_erp_user',
         SESSION_TIMEOUT: 3600000, // 1 hour
         REFRESH_THRESHOLD: 300000 // 5 minutes
     },
@@ -50,7 +50,7 @@ const CONFIG = {
     // PWA Configuration
     PWA: {
         ENABLED: true,
-        CACHE_NAME: 'tpt-erp-v1',
+        CACHE_NAME: 'ERP-erp-v1',
         OFFLINE_PAGE: '/offline.html'
     },
 
@@ -176,11 +176,11 @@ if (window.location.hostname === 'localhost' || window.location.hostname === '12
 } else if (window.location.hostname.includes('staging')) {
     CONFIG.APP.ENVIRONMENT = 'staging';
     CONFIG.APP.DEBUG = false;
-    CONFIG.API.BASE_URL = 'https://staging-api.tpterp.com/api/v1';
+    CONFIG.API.BASE_URL = 'https://staging-api.ERPerp.com/api/v1';
 } else {
     CONFIG.APP.ENVIRONMENT = 'production';
     CONFIG.APP.DEBUG = false;
-    CONFIG.API.BASE_URL = 'https://api.tpterp.com/api/v1';
+    CONFIG.API.BASE_URL = 'https://api.ERPerp.com/api/v1';
 }
 
 // Make CONFIG globally available

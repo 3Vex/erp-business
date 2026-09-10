@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Api\Agent;
 
 use App\Http\Controllers\Api\BaseApiController;
-use App\Models\Agent\Agenofile;
+use App\Models\Agent\AgentProfile;
 use App\Models\Agent\AgentToken;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -18,7 +18,7 @@ class AgentTokenController extends BaseApiController
 
     public function createToken(Request $request, int $agentId): JsonResponse
     {
-        $agent = Agenofile::find($agentId);
+        $agent = AgentProfile::find($agentId);
         if (! $agent) {
             return $this->respondNotFound();
         }

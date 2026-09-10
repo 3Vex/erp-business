@@ -1,5 +1,5 @@
 /**
- * TPT Free ERP - Virtual Keyboard Component
+ * ERP System - Virtual Keyboard Component
  * Provides a secure virtual keyboard to prevent keyloggers during sensitive input
  */
 

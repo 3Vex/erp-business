@@ -1,5 +1,5 @@
 /**
- * TPT Free ERP - Offline Data Synchronization
+ * ERP System - Offline Data Synchronization
  * Handles offline data storage, queuing, and synchronization
  */
 
@@ -379,7 +379,7 @@ class OfflineSync extends Component {
 
     async openIndexedDB() {
         return new Promise((resolve, reject) => {
-            const request = indexedDB.open('tpt-erp-offline', 1);
+            const request = indexedDB.open('ERP-erp-offline', 1);
 
             request.onupgradeneeded = (event) => {
                 const db = event.target.result;
@@ -568,7 +568,7 @@ class OfflineDataManager {
 
     async openIndexedDB() {
         return new Promise((resolve, reject) => {
-            const request = indexedDB.open('tpt-erp-data', 1);
+            const request = indexedDB.open('ERP-erp-data', 1);
 
             request.onupgradeneeded = (event) => {
                 const db = event.target.result;

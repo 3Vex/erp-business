@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Api\Agent;
 
 use App\Http\Controllers\Api\BaseApiController;
-use App\Models\Agent\Agenofile;
+use App\Models\Agent\AgentProfile;
 use App\Models\Agent\AgentSchedule;
 use App\Services\Agent\SkillRegistry;
 use Illuminate\Http\JsonResponse;
@@ -19,7 +19,7 @@ class AgentScheduleController extends BaseApiController
     // GET /agents/{id}/schedules
     public function listSchedules(int $agentId): JsonResponse
     {
-        $agent = Agenofile::find($agentId);
+        $agent = AgentProfile::find($agentId);
         if (! $agent) {
             return $this->respondNotFound();
         }
@@ -35,7 +35,7 @@ class AgentScheduleController extends BaseApiController
     // POST /agents/{id}/schedules
     public function createSchedule(Request $request, int $agentId): JsonResponse
     {
-        $agent = Agenofile::find($agentId);
+        $agent = AgentProfile::find($agentId);
         if (! $agent) {
             return $this->respondNotFound();
         }

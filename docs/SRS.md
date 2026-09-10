@@ -1,8 +1,8 @@
-# TPT Free ERP — Software Requirements Specification (SRS)
+# Enterprise Resource Planning (ERP) System — Software Requirements Specification (SRS)
 
 **Version:** 2.0  
 **Date:** September 2026  
-**Product:** TPT Free ERP  
+**Product:** Enterprise Resource Planning (ERP) System  
 **License:** Apache License 2.0
 
 ---
@@ -34,11 +34,11 @@
 
 ### 1.1 Purpose
 
-This document defines the complete software requirements for TPT Free ERP, an open-source enterprise resource planning system. It consolidates all feature specifications, module definitions, security requirements, and compliance policies.
+This document defines the complete software requirements for Enterprise Resource Planning (ERP) System, an open-source enterprise resource planning system. It consolidates all feature specifications, module definitions, security requirements, and compliance policies.
 
 ### 1.2 Scope
 
-TPT Free ERP provides a full-featured ERP platform covering 25+ business modules — from finance and inventory to AI-powered automation — suitable for businesses across 15 industries. The system is self-hosted and designed for deployment on shared hosting (cPanel), VPS, or cloud infrastructure.
+Enterprise Resource Planning (ERP) System provides a full-featured ERP platform covering 25+ business modules — from finance and inventory to AI-powered automation — suitable for businesses across 15 industries. The system is self-hosted and designed for deployment on shared hosting (cPanel), VPS, or cloud infrastructure.
 
 ### 1.3 Technology Stack
 
@@ -984,11 +984,11 @@ The system processes:
 
 | Role | Email | Password |
 |------|-------|----------|
-| Administrator | admin@demo.tpt-free-erp.com | DemoAdmin2025! |
-| Manager | manager@demo.tpt-free-erp.com | DemoManager2025! |
-| Sales | sales@demo.tpt-free-erp.com | DemoSales2025! |
-| HR | hr@demo.tpt-free-erp.com | DemoHR2025! |
-| Accounting | accounting@demo.tpt-free-erp.com | DemoAccounting2025! |
+| Administrator | admin@demo.erp-system.com | DemoAdmin2025! |
+| Manager | manager@demo.erp-system.com | DemoManager2025! |
+| Sales | sales@demo.erp-system.com | DemoSales2025! |
+| HR | hr@demo.erp-system.com | DemoHR2025! |
+| Accounting | accounting@demo.erp-system.com | DemoAccounting2025! |
 
 ### 17.2 Demo Data
 

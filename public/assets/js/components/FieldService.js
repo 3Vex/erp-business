@@ -1,5 +1,5 @@
 /**
- * TPT Free ERP - Field Service Component (Refactored)
+ * ERP System - Field Service Component (Refactored)
  * Complete service call management, technician scheduling, and customer service interface
  * Uses shared utilities for reduced complexity and improved maintainability
  */

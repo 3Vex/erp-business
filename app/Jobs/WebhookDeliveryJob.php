@@ -53,9 +53,9 @@ class WebhookDeliveryJob implements ShouldQueue
             $response = Http::timeout(15)
                 ->withHeaders([
                     'Content-Type' => 'application/json',
-                    'X-TPT-Signature' => $signature,
-                    'X-TPT-Event' => $delivery->event,
-                    'X-TPT-Delivery' => (string) $delivery->id,
+                    'X-ERP-Signature' => $signature,
+                    'X-ERP-Event' => $delivery->event,
+                    'X-ERP-Delivery' => (string) $delivery->id,
                 ])
                 ->send('POST', $webhook->url, ['body' => $body]);
 

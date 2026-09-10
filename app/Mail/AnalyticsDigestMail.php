@@ -54,7 +54,7 @@ class AnalyticsDigestMail extends Mailable
         $completedProjects = $this->projects['completed'] ?? 0;
         $pendingTasks = $this->tasks['pending'] ?? 0;
         $overdueTasks = $this->tasks['overdue'] ?? 0;
-        $appName = config('app.name', 'TPT ERP');
+        $appName = config('app.name', 'ERP System');
 
         return <<<HTML
 <!DOCTYPE html>
@@ -133,7 +133,7 @@ HTML;
         $completedProjects = $this->projects['completed'] ?? 0;
         $pendingTasks = $this->tasks['pending'] ?? 0;
         $overdueTasks = $this->tasks['overdue'] ?? 0;
-        $appName = config('app.name', 'TPT ERP');
+        $appName = config('app.name', 'ERP System');
 
         return <<<TEXT
 Weekly Analytics Digest — {$this->periodLabel}

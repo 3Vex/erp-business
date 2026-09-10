@@ -1,5 +1,5 @@
 /**
- * TPT Free ERP - Manufacturing Component (Refactored)
+ * ERP System - Manufacturing Component (Refactored)
  * Complete production planning, work order management, and quality control interface
  * Uses shared utilities for reduced complexity and improved maintainability
  */

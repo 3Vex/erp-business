@@ -1,5 +1,5 @@
 /**
- * TPT Free ERP - Human Resources Component (Refactored)
+ * ERP System - Human Resources Component (Refactored)
  * Main HR dashboard and employee management interface
  * Uses shared utilities for reduced complexity and improved maintainability
  */

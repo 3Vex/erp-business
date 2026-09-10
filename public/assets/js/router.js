@@ -1,5 +1,5 @@
 /**
- * TPT Free ERP - Router
+ * ERP System - Router
  * Client-side routing system for single-page application
  */
 

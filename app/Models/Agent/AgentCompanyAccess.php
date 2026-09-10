@@ -21,9 +21,9 @@ class AgentCompanyAccess extends Model
         'expires_at' => 'datetime',
     ];
 
-    public function agenofile(): BelongsTo
+    public function AgentProfile(): BelongsTo
     {
-        return $this->belongsTo(Agenofile::class);
+        return $this->belongsTo(AgentProfile::class);
     }
 
     public function granter(): BelongsTo

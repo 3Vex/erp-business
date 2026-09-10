@@ -13,15 +13,17 @@ class CampaignEmail extends Mailable
     use Queueable, SerializesModels;
 
     public function __construct(
-        public readonly string $subject,
+        public readonly string $emailSubject,
         public readonly string $htmlBody,
         public readonly string $campaignName,
         public readonly ?string $leadName = null,
-    ) {}
+    ) {
+        $this->subject = $emailSubject;
+    }
 
     public function envelope(): Envelope
     {
-        return new Envelope(subject: $this->subject);
+        return new Envelope(subject: $this->emailSubject);
     }
 
     public function content(): Content
@@ -41,7 +43,7 @@ class CampaignEmail extends Mailable
 <html>
 <head><meta charset="utf-8"></head>
 <body style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
-    <h2 style="color: #333;">{$this->subject}</h2>
+    <h2 style="color: #333;">{$this->emailSubject}</h2>
     {$greeting}
     <div style="color: #555; line-height: 1.6;">
         {$this->htmlBody}
@@ -59,7 +61,7 @@ HTML;
         $plainText = strip_tags($this->htmlBody);
 
         return <<<TEXT
-{$this->subject}
+{$this->emailSubject}
 
 {$greeting}{$plainText}
 

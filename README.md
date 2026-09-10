@@ -153,6 +153,18 @@ Visit the application at: **`http://127.0.0.1:8000/`**
 
 ---
 
+### 🔑 Default Administrator Credentials
+
+After running database seeders (`php artisan migrate --seed`), use the following default credentials to log in:
+
+| Role | Email | Password |
+|---|---|---|
+| **System Administrator** | `admin@erp.local` | `password` |
+
+> **Security Note:** Always update the default password after your first login in a production environment.
+
+---
+
 ## 📑 Core Modules & Features
 
 | Module | Features & Scope |

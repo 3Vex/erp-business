@@ -1,5 +1,5 @@
 /**
- * TPT Free ERP - Inventory Management Component (Refactored)
+ * ERP System - Inventory Management Component (Refactored)
  * Main inventory dashboard and management interface
  * Uses shared utilities for reduced complexity and improved maintainability
  */

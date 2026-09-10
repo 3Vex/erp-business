@@ -60,7 +60,7 @@ class AgentTeamController extends BaseApiController
 
     public function show(int $id): JsonResponse
     {
-        $team = AgentTeam::with(['members.agenofile', 'creator:id,name,email'])
+        $team = AgentTeam::with(['members.AgentProfile', 'creator:id,name,email'])
             ->withCount(['executions', 'members'])
             ->find($id);
 
@@ -135,7 +135,7 @@ class AgentTeamController extends BaseApiController
             ]);
         }
 
-        $team->load('members.agenofile');
+        $team->load('members.AgentProfile');
 
         return $this->respondSuccess('Team members updated', $team->members);
     }
@@ -177,7 +177,7 @@ class AgentTeamController extends BaseApiController
             return $this->respondNotFound();
         }
 
-        $execution = AgentTeamExecution::with(['stepResults.agenofile', 'triggeredBy:id,name,email'])
+        $execution = AgentTeamExecution::with(['stepResults.AgentProfile', 'triggeredBy:id,name,email'])
             ->where('team_id', $id)
             ->find($execId);
 

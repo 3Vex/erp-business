@@ -1,5 +1,5 @@
 /**
- * TPT Free ERP - State Management
+ * ERP System - State Management
  * Centralized state management system using Observer pattern
  */
 

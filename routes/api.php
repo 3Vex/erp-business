@@ -105,7 +105,7 @@ use Illuminate\Support\Facades\Route;
 
 /*
 |--------------------------------------------------------------------------
-| API Routes — TPT Free ERP v1
+| API Routes — ERP System v1
 |--------------------------------------------------------------------------
 | All versioned endpoints live under /api/v1/
 | Auth endpoints live under /api/auth/ (no version prefix)
@@ -146,7 +146,7 @@ Route::prefix('public')->group(function () {
 Route::get('/health', HealthCheckController::class);
 
 // ===== AUTHENTICATED ROUTES — all under /v1 =====
-Route::middleware(['auth:sanctum', 'throttle:api', 'cors.tpt'])->prefix('v1')->group(function () {
+Route::middleware(['auth:sanctum', 'throttle:api', 'cors.erp'])->prefix('v1')->group(function () {
 
     // ----- Auth Management -----
     Route::post('/auth/logout', [AuthController::class, 'logout']);
@@ -1182,7 +1182,7 @@ Route::middleware(['auth:sanctum', 'throttle:api', 'cors.tpt'])->prefix('v1')->g
 });
 
 // ===== LEGACY ALIASES — /api/{module} redirects to /api/v1/{module} for backwards compat =====
-Route::middleware(['auth:sanctum', 'throttle:api', 'cors.tpt'])->group(function () {
+Route::middleware(['auth:sanctum', 'throttle:api', 'cors.erp'])->group(function () {
     Route::post('/auth/logout', [AuthController::class, 'logout'])->name('auth.logout.legacy');
     Route::get('/auth/me', [AuthController::class, 'me'])->name('auth.me.legacy');
 });

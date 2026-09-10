@@ -24,8 +24,8 @@ class AgentTeamMember extends Model
         return $this->belongsTo(AgentTeam::class, 'team_id');
     }
 
-    public function agenofile(): BelongsTo
+    public function AgentProfile(): BelongsTo
     {
-        return $this->belongsTo(Agenofile::class);
+        return $this->belongsTo(AgentProfile::class);
     }
 }

@@ -301,7 +301,7 @@ class RecruitmentController extends BaseApiController
         $department = $job->department;
         $salary = number_format((float) $request->input('salary'), 2);
         $startDate = Carbon::parse($request->input('start_date'))->format('F j, Y');
-        $companyName = config('app.name', 'TPT ERP');
+        $companyName = config('app.name', 'ERP System');
         $candidateName = $application->candidate_name;
         $jobTitle = $job->title;
         $deptName = $department->name ?? 'N/A';

@@ -1,5 +1,5 @@
 /**
- * TPT Free ERP - IoT & Device Integration Component (Refactored)
+ * ERP System - IoT & Device Integration Component (Refactored)
  * Complete device management, sensor data collection, real-time monitoring, and predictive maintenance interface
  * Uses shared utilities for reduced complexity and improved maintainability
  */

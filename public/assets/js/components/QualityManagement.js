@@ -1,5 +1,5 @@
 /**
- * TPT Free ERP - Quality Management Component (Refactored)
+ * ERP System - Quality Management Component (Refactored)
  * Complete quality control, audit management, and compliance system interface
  * Uses shared utilities for reduced complexity and improved maintainability
  */

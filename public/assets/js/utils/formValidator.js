@@ -1,5 +1,5 @@
 /**
- * TPT Free ERP - Form Validator Utility
+ * ERP System - Form Validator Utility
  * Comprehensive form validation with custom rules, error handling, and user feedback
  */
 

@@ -1,5 +1,5 @@
 /**
- * TPT Free ERP - Mobile Navigation Component
+ * ERP System - Mobile Navigation Component
  * Touch-optimized navigation for mobile devices
  */
 
@@ -306,7 +306,7 @@ class MobileNavigation extends Component {
 
         // Brand/Logo
         const brand = DOM.create('div', { className: 'nav-brand' });
-        brand.innerHTML = '<i class="fas fa-cogs"></i><span>TPT ERP</span>';
+        brand.innerHTML = '<i class="fas fa-cogs"></i><span>ERP System</span>';
         nav.appendChild(brand);
 
         // Action buttons
@@ -404,7 +404,7 @@ class MobileNavigation extends Component {
         header.appendChild(closeBtn);
 
         const brand = DOM.create('div', { className: 'side-brand' });
-        brand.innerHTML = '<i class="fas fa-cogs"></i><span>TPT ERP</span>';
+        brand.innerHTML = '<i class="fas fa-cogs"></i><span>ERP System</span>';
         header.appendChild(brand);
 
         panel.appendChild(header);

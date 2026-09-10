@@ -1,5 +1,5 @@
 /**
- * TPT Free ERP - Performance Optimizer Utility
+ * ERP System - Performance Optimizer Utility
  * Lazy loading, code splitting, bundle optimization, and virtual scrolling
  */
 
@@ -535,7 +535,7 @@ class BundleAnalyzer {
 class ServiceWorkerManager {
     constructor() {
         this.registration = null;
-        this.cacheName = 'tpt-erp-v1';
+        this.cacheName = 'ERP-erp-v1';
     }
 
     async register() {

@@ -1,5 +1,5 @@
 /**
- * TPT Free ERP - Dashboard Component
+ * ERP System - Dashboard Component
  * Main dashboard with widgets and key metrics
  */
 

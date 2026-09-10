@@ -30,20 +30,20 @@
     "default": {
       "outputSourceFiles": true
     },
-    "applicationName": "TPT Free ERP",
+    "applicationName": "ERP System",
     "disqus": "",
     "googleAnalytics": "",
     "openGraph": {
-      "title": "TPT Free ERP API Documentation",
+      "title": "ERP System API Documentation",
       "type": "website",
       "image": "",
-      "site_name": "TPT Free ERP",
+      "site_name": "ERP System",
       "url": ""
     },
     "meta": {
-      "title": "TPT Free ERP API Documentation",
-      "description": "Comprehensive API documentation for TPT Free ERP utilities and components",
-      "keyword": "TPT, ERP, API, documentation, JavaScript, PHP"
+      "title": "ERP System API Documentation",
+      "description": "Comprehensive API documentation for ERP utilities and components",
+      "keyword": "ERP, API, documentation, JavaScript, PHP"
     },
     "linenums": true
   },

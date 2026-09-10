@@ -33,7 +33,7 @@ class DatabaseSeeder extends Seeder
 
         // Default admin user
         $admin = User::firstOrCreate(
-            ['email' => 'admin@tpt-erp.local'],
+            ['email' => 'admin@erp.local'],
             [
                 'name' => 'System Administrator',
                 'password' => Hash::make('password'),

@@ -19,8 +19,8 @@ class AgentSkillAssignment extends Model
         'config_overrides' => 'array',
     ];
 
-    public function agenofile(): BelongsTo
+    public function AgentProfile(): BelongsTo
     {
-        return $this->belongsTo(Agenofile::class);
+        return $this->belongsTo(AgentProfile::class);
     }
 }

@@ -1,5 +1,5 @@
 /**
- * TPT Free ERP - Test Framework Utility
+ * ERP System - Test Framework Utility
  * Comprehensive testing framework with Jest setup, unit tests, integration tests, and e2e testing
  */
 
