@@ -205,6 +205,52 @@ Interactive Swagger API documentation is available at:
 
 ---
 
+## 🔄 Development Workflow (Adding a New Feature)
+
+When starting work on a new feature or module, follow this step-by-step development process:
+
+### Step 1: Create a Feature Branch
+```bash
+git checkout main
+git pull origin main
+git checkout -b feature/your-feature-name
+```
+
+### Step 2: Backend Development (Laravel)
+1. **Model & Migration:** Create Eloquent model under `app/Models/{Module}/` with `use HasFactory;` and add migration in `database/migrations/`.
+2. **API Controller:** Create controller in `app/Http/Controllers/Api/{Module}/` extending `BaseApiController`. Set `protected string $cacheTag = 'tag_name';` for automatic caching.
+3. **Routes:** Register REST routes in `routes/api.php` under `auth:sanctum` middleware.
+4. **Factory & Seeder:** Add factory in `database/factories/{Module}/` for automated tests.
+
+### Step 3: Frontend Development (Vue 3)
+1. **View Component:** Create Vue view component in `resources/js/views/{module}/{Feature}View.vue`.
+2. **Route:** Register lazy-loaded route in `resources/js/router/index.ts`.
+3. **API Integration:** Connect API using Pinia store or Axios.
+
+### Step 4: Testing & Formatting
+1. **Feature Tests:** Create test file under `tests/Feature/{Module}/`.
+2. **Run Tests:**
+   ```bash
+   php artisan test --filter YourFeatureTest
+   ```
+3. **Code Formatting:**
+   ```bash
+   ./vendor/bin/pint
+   ```
+4. **Regenerate Swagger Docs (if API changed):**
+   ```bash
+   php artisan l5-swagger:generate
+   ```
+
+### Step 5: Commit & Push
+```bash
+git add .
+git commit -m "feat(module): add your feature description"
+git push origin feature/your-feature-name
+```
+
+---
+
 ## 🧪 Testing
 
 The test suite works out-of-the-box for all supported databases (MySQL, PostgreSQL, SQLite, etc.) without affecting your production or development database.
